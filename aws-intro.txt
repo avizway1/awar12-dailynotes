@@ -1,0 +1,39 @@
+
+
+AWS Global Infrastructure : 
+
+Regions : a region is nothing but a physical or geographical location where AWS segregated the entire world into "39 regions" as of October 2026. 
+India : Mumbai (ap-south-1).. Hyderbad (ap-south-2).. 
+
+---
+
+Availability zones / AZs : AZ consists of one or more discrete data centres. Every AZ will have its independent power, cooling, and physical security.  124 AZs as of 30 Oct..
+Mumabi & Hyd regions has 3 AZs each..
+Hyd: ap-south-2a , ap-south-2b & ap-south-2c
+
+Actual workload runs within these availability zones. 
+
+---
+
+Point of presence / Edge Networks : as of today, October 2026, AWS has 750+ edge locations across the globe. 
+
+CDN / Caching : 
+
+TTL : time to live : Default : 86,400 Seconds (24 Hrs)... Max TTL: 365 Days.. 
+
+---
+
+Local Zones : These are like mini AWS data centres built in major metropolitan areas where AWS doesn't have a full region. 
+
+
+----
+
+Latency : Latency is nothing but the time delay between a cause and its effect. 
+
+Time taken for a data packet to travel from its source to destination or to travel back (RTT - Round Trip Time)
+
+ping google.com
+
+tracert google.com		: Windows
+traceroute google.com	: Linux
+
