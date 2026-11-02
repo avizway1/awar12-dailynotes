@@ -37,3 +37,124 @@ ping google.com
 tracert google.com		: Windows
 traceroute google.com	: Linux
 
+
+================================================================================
+
+D: 02/11/2026
+
+
+
+Organisation : 
+
+SDLC : software development life cycle ..
+
+Requirements gathering --> POC (proof of concept) --> Training
+
+Dev - Development Environment - Developers 
+QA - Quality Assurance - Testing
+PreProd - UAT (user acceptance testing) - 
+Prod - Production - Live
+DR - disaster recovery 
+
+
+AWS Dedicated account for Dev
+AWS Dedicated account for UAT
+AWS Dedicated account for PRD
+AWS Dedicated account for QA
+AWS Dedicated account for Central Logging
+AWS Dedicated account for Central Networking
+AWS Dedicated account for Management Account  --> Central Billing
+
+Option 1 : 1 Central login URL for multiple accounts : IAM Identity Center
+- Dev
+- uat
+- prd
+- qa
+
+Option 2 : Individual user i each account : IAM User
+- dev - username & pwd
+- uat - username & pwd
+- prd - username & prd
+
+
+=======================================
+
+Support Plans : 
+
+1. Account and Billing related Queries : Activation, Service Activation, Billing info.. : Free for everyone
+2. Technical Assistance : Any technical help from AWS : DEPENDS ON AWS SUPPORT PLAN..
+
+
+Basic Support Plan : Free
+- Included for every account automatically.
+- 24/7 access to AI first troubleshooting agent, Amazon kiro-cli.. 
+- Account and Billing related queries only.. NO Technical assistance from AWS team..
+- limited trsuted advisor checks.. 
+
+Business Support+ : From $29/month per account
+- AWS recommended minimum plan for production workload
+- 24/7 AI-first troubleshooting agent support
+- 24/7 phone, chat, or email contact method with an "AWS support engineer"
+- Critical case response is < 30 minutes
+- Full Trusted Advisor checks
+- Unlimited support cases from any user..
+
+Enterprise Support Plan : From $5,000/month
+- Recommended plan for production-critical workload
+- A designated TAM (Technical account manager) will allocate.
+- Critical case response is < 15 minutes.
+- Full Trusted Advisor checks.
+- Annual architectural reviews and operational reviews, along with Well Architected Framework review.
+- Multi-account support (one support plan can be used with thousands of accounts).
+
+Unified operations: From $50,000/month
+- Recommended if you are running a mission-critical workload that requires enhanced resilience and an application-specific expert from AWS. 
+- Everything from "Enterprise Support Plan"
+- Critical case response is < 5 minutes.
+- TAM + Domain Specialist + Incident Management
+
+
+==============
+
+Case Severity:
+General Guidance : < 24 Hrs
+System impaired : < 12 hrs
+Production system impaired : < 4 hrs
+Production system down : < 1 hr
+Business critical system down : < 15 Min
+Mission critical business system down : < 5 Min
+
+==============
+
+Trusted Advisor : 
+- Cost optimization : un-used or over provisioned..
+- Performance : Under provisioned.. 
+- Security : Port opened for everyone
+- Fault tolerance : Multi AZ check.. 
+- Service limits : Soft limits increase..
+- Operational excellence : logs enable.. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
