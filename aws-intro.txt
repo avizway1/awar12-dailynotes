@@ -42,8 +42,6 @@ traceroute google.com	: Linux
 
 D: 02/11/2026
 
-
-
 Organisation : 
 
 SDLC : software development life cycle ..
@@ -135,10 +133,118 @@ Trusted Advisor :
 - Operational excellence : logs enable.. 
 
 
+==========================================================================================
+
+D: 03/11/2026
+
+EC2 : Elastic Compute Cloud : 
+
+Client : Sends the requests
+Server : Process the request and respond back
+
+Kitchen : Server
+Customer : Client
+Waiter : API gateway : GET, PUT, UPDATE
+
+Old way : Physicals Servers.. Data Center.. Power connection UPS, Cooling, Maintenance.. Security..
+
+Festival Sale : x2 
+x 1 ==> ??? 
+
+lot of CAPEX (capital expenditure)
+
+======
+
+Amazon EC2 : it lets us rent a server from AWS in minutes. We can choose how much CPU, how much memory, and how much storage we need. We have full flexibility to start it, use it, stop it, and delete it. 
+
+Pay-as-you-go : pay for the resources you actually used. ( 1hr --> 1$ only)
+
+x 10 servers - All days
+x2 - 20 servers - festive
+
+======
+
+Server = Instance (AWS) = Azure VM = Compute engine
+
+======
+
+On-Demand Instance : No commitment. Pay per second / hour. 
+We pay for compute only for the time our instance is running, with no upfront payment and no long-term commitment. 
+- testing with wide varieties of configuration, Dev/QA
+- Short term or unpredictable workloads.
+
+Cons: 
+- Most expensive option per hour.
+- If we are running 24/7 per month, it's costly. 
+
+----
+
+RIs : Reserved Insatnces : Commitment for 1 year or 3 years, and we get a significant discount compared to on demand, up to 72%. 
+
+We have two types of RIs. 
+- Standard RI : Biggest discount but we cannot change instance family. (Can change AZ or size with in the family)
+- Convertible RI :  Smaller Discount. Can be exchanged for another convertible reserved instance with different attributes, like family, OS, and tenancy. 
+
+3 pricing Options:
+1. All Upfront : pay everything at the start. highest discount.
+2. Partial upfront : pay some amount now. Pay the rest of the amount based on the usage with a discounted hourly rate. 
+3. No Upfront : pay on an hourly basis. Cost is almost similar to on-demand but capacity will be reserved for the committed duration. 
+
+AWS Marketplace : You can register as seller, Sell your reserved capacity. 
+
+---
+
+Spot Instances : No Commitment.. Discount upto 90%.
+- Instances can be interrupted. 
+
+AWS always has unused server capacity. Spot instances let us use the spare capacity at a huge discount. 
+When AWS needs that capacity back, it can stop or terminate our instance with just 2 minutes' warning. 
+
+This is a good option for batch jobs, data processing, video rendering, big data, or ML training that requires high configuration at low cost. 
+
+- We can use pricing history to quote our price while purchasing spot instances.
+
+---
+
+Savings Plan : This is a modern replacement or improvement for RIs. AWS introduces this to reduce the reserved instance complexity. 
+
+We are committing with AWS on hourly pricing. You give a commitment to AWS that you spend a fixed amount per hour on compute. AWS gives a good amount of discount. 
+
+	- Compute savings plan : we can use this with multiple services like EC2, Lambda, and Fargate...
+	- EC2 Instance Savings plan : we can use this with only EC2 specific to a particular region.. 
+	- Sagemaker savings plan : AI/ML Workload
+	- Database Savings plan : Database realted workload i.e; RDS, Elasticache..
 
 
+---
+
+Instance Family : 
+
+- General Purpose Instances 	: Balanced CPU + memory + network 		: T, M
+- Compute optimises				: More CPU powered Instance				: C
+- Memory Optimised				: Lots of RAM - Data lives in memory	: R, U, X, Z
+- Storage Optimised				: High IOPS / Throughput				: I, D, H
+- Accelerated Computing			: GPU Supported Hardware				: P, G, Trn
+- High-Performance Computing	: HPC Devices							: hpc
 
 
+i - intel processor
+a - AMD processor
+g - Graviton processor
+
+t8i.micro
+
+t - Instance family
+8 - generation		(Higher generation = better performance with better pricing.)
+i - intel processor
+
+.micro	- Size of instance i.e; CPU, memory 
+.medium
+.small
+.2xlarge
+.18xlarge
+
+---------------
 
 
 
