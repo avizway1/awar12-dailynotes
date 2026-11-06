@@ -1,0 +1,339 @@
+
+D: 03/11/2026
+
+EC2 : Elastic Compute Cloud : 
+
+Client : Sends the requests
+Server : Process the request and respond back
+
+Kitchen : Server
+Customer : Client
+Waiter : API gateway : GET, PUT, UPDATE
+
+Old way : Physicals Servers.. Data Center.. Power connection UPS, Cooling, Maintenance.. Security..
+
+Festival Sale : x2 
+x 1 ==> ??? 
+
+lot of CAPEX (capital expenditure)
+
+======
+
+Amazon EC2 : it lets us rent a server from AWS in minutes. We can choose how much CPU, how much memory, and how much storage we need. We have full flexibility to start it, use it, stop it, and delete it. 
+
+Pay-as-you-go : pay for the resources you actually used. ( 1hr --> 1$ only)
+
+x 10 servers - All days
+x2 - 20 servers - festive
+
+======
+
+Server = Instance (AWS) = Azure VM = Compute engine
+
+======
+
+On-Demand Instance : No commitment. Pay per second / hour. 
+We pay for compute only for the time our instance is running, with no upfront payment and no long-term commitment. 
+- testing with wide varieties of configuration, Dev/QA
+- Short term or unpredictable workloads.
+
+Cons: 
+- Most expensive option per hour.
+- If we are running 24/7 per month, it's costly. 
+
+----
+
+RIs : Reserved Instances : Commitment for 1 year or 3 years, and we get a significant discount compared to on demand, up to 72%. 
+
+We have two types of RIs. 
+- Standard RI : Biggest discount but we cannot change instance family. (Can change AZ or size with in the family)
+- Convertible RI :  Smaller Discount. Can be exchanged for another convertible reserved instance with different attributes, like family, OS, and tenancy. 
+
+3 pricing Options:
+1. All Upfront : pay everything at the start. highest discount.
+2. Partial upfront : pay some amount now. Pay the rest of the amount based on the usage with a discounted hourly rate. 
+3. No Upfront : pay on an hourly basis. Cost is almost similar to on-demand but capacity will be reserved for the committed duration. 
+
+AWS Marketplace : You can register as seller, Sell your reserved capacity. 
+
+---
+
+Spot Instances : No Commitment.. Discount upto 90%.
+- Instances can be interrupted. 
+
+AWS always has unused server capacity. Spot instances let us use the spare capacity at a huge discount. 
+When AWS needs that capacity back, it can stop or terminate our instance with just 2 minutes' warning. 
+
+This is a good option for batch jobs, data processing, video rendering, big data, or ML training that requires high configuration at low cost. 
+
+- We can use pricing history to quote our price while purchasing spot instances.
+
+---
+
+Savings Plan : This is a modern replacement or improvement for RIs. AWS introduces this to reduce the reserved instance complexity. 
+
+We are committing with AWS on hourly pricing. You give a commitment to AWS that you spend a fixed amount per hour on compute. AWS gives a good amount of discount. 
+
+	- Compute savings plan : we can use this with multiple services like EC2, Lambda, and Fargate...
+	- EC2 Instance Savings plan : we can use this with only EC2 specific to a particular region.. 
+	- Sagemaker savings plan : AI/ML Workload
+	- Database Savings plan : Database realted workload i.e; RDS, Elasticache..
+
+
+---
+
+Instance Family : 
+
+- General Purpose Instances 	: Balanced CPU + memory + network 		: T, M
+- Compute optimises				: More CPU powered Instance				: C
+- Memory Optimised				: Lots of RAM - Data lives in memory	: R, U, X, Z
+- Storage Optimised				: High IOPS / Throughput				: I, D, H
+- Accelerated Computing			: GPU Supported Hardware				: P, G, Trn
+- High-Performance Computing	: HPC Devices							: hpc
+
+t8i.micro
+
+i - intel processor
+a - AMD processor
+g - Graviton processor
+
+t - Instance family
+8 - generation		(Higher generation = better performance with better pricing.)
+i - intel processor
+
+.micro	- Size of instance i.e; CPU, memory 
+.medium
+.small
+.2xlarge
+.18xlarge
+
+=====================================================================
+
+D: 04/11/2026
+
+Launch your first Linux instance and get connected to it. 
+
+Step 1 : provide or add tags for the launched instance. 
+
+Below are the commonly allocated tags for our EC2 instances:
+- Name						- MyServer
+- Project					- POC Project
+- Cost centre				- AAZAA
+- OS / platform				- Windows / Linux
+- Client ID or name			- ICICI / ICIC
+
+
+Step 2 : Choose AMI (Amazon Machine Image) : Selecting a pre-installed and configured operating system to launch..
+
+Step 3 : choose the instance type. 
+
+Free Account:
+t3.micro
+t3.small		--> or choose this
+c7i-flex.large
+m7i-flex.large
+t8i.small		--> Choose this
+t8i.micro
+
+
+Step 4 : Create / Choose a Keypair
+
+Keypair = Combination of public key and private key 
+
+Public Key = Lock				(AWS keeps it, automatically store inside the launching EC2 instance.)
+Private Key = Key to open lock	(Downloads to our laptop automatically)
+
+Windows OS : we can use the public key (.pem - privacy-Enhanced Mail) to retrieve the password. 
+Linux OS : We can use key to authenticate directly (.pem / .ppk).
+
+--> One key pair can be used with multiple EC2 instances. 
+
+
+Step 5 : Network Configuration (VPC - Virtual private Cloud)
+
+Firewall (security groups): a security group is a set of firewall rules that controls the traffic for our instance. 
+
+We can add rules to allow specific traffic to reach our instance from 
+- a specific network or 
+- from any network. 
+
+Ports : 0 - 65535			= 65536 ports
+
+Linux	: SSH : Secure Shell : 22
+Windows : RDP : Remote Desktop Protocol : 3389
+web		: http  : Hypertext Transfer Protocol : 80
+		: https : secure over HTTP : 443
+DNS		: 53
+ftp		: File Transfer Protocol : 20 & 21
+Mysql	: 3306
+MSSql	: 1433
+Postgre	: 5432
+NFS		: Network file system : 2049
+
+From where do you want to connect to this instance?
+1. Anywhere : 0.0.0.0/0 :::/0
+2. Custom	: Provide organisations or clients with network public IPs. 
+3. MyIP 	: Picks your currently connected network IP. 
+
+Requirement : launch a server. This server should be accessible to only my corporate office users. 
+
+* In our classes or home labs we are going to use it anywhere.
+In a corporate environment we never, ever open a port to the entire world. It's treated as a security violation or breach. 
+
+
+Step 6 : choose storage for an instance. 
+
+Windows : 30 Gb Min
+Linux : 8 gb / 10 gb
+
+==============================
+
+Option 1 : browser based connection : 
+choose instance, click connect --> choose "EC2 Instance Connect" --> Click "connect"
+
+* We need to open port anywhere / AWS provided IP Range.
+* browser pop must be enabled
+* WE DONT USE THIS FEATURE IN REAL ENVIRONMENTS.
+
+=============
+
+Option 2 : we have a service named Cloud Shell in our AWS environment. 
+We can use it to get connected to the instance. 
+
+- Launch cloudshell terminal
+- Copy the instance attached keypair to cloudshell
+- Adjust the permissions of keypair
+- use keypair and connect to instance.
+
+chmod 400 awar12.pem
+
+ssh -i awar12.pem ec2-user@65.2.136.168
+
+whoami
+
+=============
+
+Option 3 : 
+Windows: COmmand Prompt / powershell
+Mac OS : Terminal
+
+Open cmd prompt and type "ssh"
+(Instructions --> good)
+(SSH is unrecognised command --> Need to install/enable openssh in your laptop)
+
+open settings --> system --> Optional features --> View features --> Add an optional feature --> look for "OpenSSH Client" --> Click on the checkbox --> next --> finish
+Close the command prompt and open it again. Type `ssh` and it should return with the SSH usage instructions now. 
+
+Open command prompt at your keypair storing folder --> type "dir" and confirm keypair presence
+
+
+ssh -i awar12.pem ec2-user@65.2.136.168
+
+----
+
+Windows : Unprotected private key / Permissions are too open.
+
+icacls : integrity control access control list 
+
+icacls "c:\path\to\keyapir" /inheritance:r
+icacls "c:\path\to\keyapir" /grant:r "$($env:USERNAME):(F)"
+icacls "c:\path\to\keyapir"
+
+ssh -i awar12.pem ec2-user@65.2.136.168
+
+
+=========
+
+Option 4 : MacOS & Windows
+
+Install "git" in your laptop
+
+https://git-scm.com/install
+
+Right click on the folder we have keypair, choose "open git bash here"
+
+ssh -i awar12.pem ec2-user@65.2.136.168
+
+=========
+
+Option 5 : Putty tool to connect to linux instance
+
+putty.org
+
+https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+
+.ppk : Putty private key
+
+
+We have .pem, but want to use putty tool to get connect to the instance. 
+
+Convert .pem to .ppk using puttygen tool
+
+===========
+
+Option 6 : use 3rd party named, MobaXterm
+
+
+=====================================================================================================
+
+D: 06/11/2026
+
+How to launch a Windows instance, how to get connected to it, and how to make it a web server 
+
+
+
+Step 1 : Add tags to instance
+
+Step 2 : Choose an AMI
+
+Step 3 : Choose an Instance type
+
+Step 4 : Choose keypair
+
+Step 5 : COnfigure network - Security Group (RDP - Remote Desktop Protocol - 3389)
+
+Step 6 : COnfigure Storage - Windows - Min 30 GB
+
+--------
+
+Windows OS:
+Windows + R --> type "mstsc" --> Instance public IP : 13.201.80.182 --> Enter (yes) -> Ask for credentials
+
+Mac OS : 
+
+13.201.80.182
+ec2-13-201-80-182.ap-south-1.compute.amazonaws.com
+
+---
+
+Windows + R --> lusrmgr.msc	--> Enter
+
+============
+
+By default Windows will have two concurrent remote desktop licences, meaning only two users can connect to an instance at a time. If someone logs out a new guy can log in. 
+
+
+============
+
+
+
+ERR_CONNECTION_TIMED_OUT : 
+
+ERR_CONNECTION_REFUSED : 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
