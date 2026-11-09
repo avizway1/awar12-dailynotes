@@ -1,0 +1,160 @@
+
+
+D: 9/11/2026
+
+Linux is a free, open-source operating system based on Unix. 
+- Linux, created by Linus Torvalds, had its first release in 1991. 
+
+An operating system is software that sits between us and the hardware. Without an operating system it is just metal or a device. 
+
+- Android uses the Linux kernel. 
+- IOS and macOS: they are not Linux. They use a Unix-style kernel called Darwin / XNU. 
+
+Why Linux
+- Free : no licencing cost for most of the versions. 
+- Secure : strong permission models 
+- Stable : run for years without rebooting the machine. 
+- Fast : can run on very bare-minimal hardware.
+- Community : Linux has thousands of contributors. 
+
+Linux Kernel is just a Core.
+
+Distro / Distribution : Linux Kernel + tools + Package Managers + default apps.
+
+
+General Purpose : Ubuntu, Linux Mint, Fedora
+Enterprise Servers : RHEL (Redhar Enterprise License), SUSE, oracla Linux, Amazon Linux
+Community Servers : CentOS, AlmaLinux, RockyLinux
+Security Testing / penetration testing : Kali Linux, Parrot OS
+Lightweight Containers : Alpine, Debian - Slim, Puppy Linux, (Bookwarm, trixie - Debian)
+
+
+HOW LINUX BOOTS: 
+
+1. Hardware initialisation: BIOS (old) or UEFI (new)
+	1.1 POST - power-on self-test checks critical hardware status, like RAM, CPU, and storage. 
+	1.2 it picks the primary boot device based on the boot order. 
+2. Boot Sector - MBR / EFI Partition
+	2.1 firmware looks at disc partition layout for instructions on what to run. 
+	2.2 it finds and starts the boot loader. 
+3. Boot Loader / GRUB2
+	3.1 it shows a menu to choose an operating system or kernel version. It picks the default if we don't choose any. 
+	3.2 file loads from /boot/vmlinuz-* and /boot/initramfs-* to memory
+4. Linux Kernel (The Heart of the OS)
+	4.1 it acts as a translator or bridge between software applications and physical hardware. 
+	4.2 it detects the hardware, it loads the drivers, and it mounts the root file system to / . 
+5. init system (systemd)
+	5.1 the Linux kernel starts systemd as the very first process with process ID 1. 
+	5.2 finally we get a login prompt to enter our credentials. 
+	
+
+Runlevel/ Systemd Targets: 
+
+A run level tells Linux in which mode I should run. 
+
+init 0		: Shutdown 
+init 1		: Single-user mode for repairs
+init 2		: Multi-user, No Network - CLI
+init 3		: Multi-user with Network - CLI
+init 4		: Unused by default
+init 5		: Full Desktop Mode (GUI)
+init 6		: Reboot
+
+runlevel
+who -r
+systemctl get-default
+
+sudo systemctl set-default multi-user.target
+
+
+In EC2 default shutdown behaviour is set to stop. We have two options to set up:
+1. stop
+2. terminate
+
+The instance public IP address will change when we perform stop and start operations. If we need a static fixed IP address, we need to depend on EIP (Elastic IP). 
+
+
+In Windows everything starts from drives like C:\ or D:\ 
+In Linux everything starts from one single root (/). Even extra discs and USB drives are mounted as folders under /. 
+
+
+
+Windows		: folder
+Linux		: Directory 
+
+cd			: Change Directory
+cd /
+
+cd ..		: Takes one step back on the current path
+
+ls			: List
+
+ls -a		: List everything, including the hidden files whose names start with `.`. 
+
+ls -l		: long list
+ls -lh		: long list, values in human redable format
+ls -ltr		: sort by time, oldest first, newest last
+
+cat			: Helps to view the content of a file 
+more		: Helps to view the content of a file 
+
+pwd			: Print working Directory
+
+whoami		: Tell us what user we are currently working as. 
+
+sudo su		: 
+
+--------
+
+Special Path symbols:
+
+/			: Root directory						: cd /
+.			: Current Directory						: cp /etc/file1 .
+..			: Parent Directory / one step back		: cd ..
+~			: Current user home direcoryt			: cd ~
+*			: Wild card - Matched anything			: ls s*
+
+--------
+
+** Don't type the entire folder name or file name. Make sure you use Tab. If multiple files are available it won't display. You just press double Tab and it shows all with the same name. you enter next letter and press tab again.
+
+--------
+
+
+In Linux Ecerything starts from /
+
+
+/bin		: It contains binary executables: the commands used by all users, like `ls`, `cp`, and `cat`. 
+			: c:\windows\system32
+
+/sbin		: System binaries, admin commands for maintenance and reboot. 
+
+/boot		: Bootloader files like a kernel, VM Linux, initramfs, grub2 
+
+/root		: Root user's home directory. It is not the same as `/`.  (c:\users\Administraor)
+
+/home		: All regular users' home directory  (c:\users)
+
+/dev		: Device files like discs, NIC cards (windows: Device Manager)
+
+/etc		: Configuration files which can be edited will be in text format. 
+
+/var		: Variable files, like logs (/etc/logs/httpd), databases, and web content (/var/www/html/)
+
+/usr		: User programmes and libraries 
+
+/mnt		:  Mount point: manually attach extra disc (EBS VOlumes / EFS Volumes)
+
+/tmp		: Temporary files: most of these files are cleared on reboot. 
+
+/lib		: Libraries: shared code programmes use 
+
+
+================================================================================================
+
+
+
+
+
+
+

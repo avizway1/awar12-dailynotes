@@ -316,10 +316,15 @@ By default Windows will have two concurrent remote desktop licences, meaning onl
 ============
 
 
-
 ERR_CONNECTION_TIMED_OUT : 
 
 ERR_CONNECTION_REFUSED : 
+
+================================================================================================
+
+D: 9/11/2026
+
+
 
 
 
