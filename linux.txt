@@ -152,7 +152,116 @@ In Linux Ecerything starts from /
 
 ================================================================================================
 
+D: 10/11/2026
 
+
+touch song{1..5}.mp3
+touch video{1..5}.mp4
+
+mkdir songs
+
+mkdir songs videos
+
+mkdir -p 2026/nov/11th
+
+
+cp file1 file2 /folder
+cp s* songs/
+cp -r dir1 dir2
+cp /etc/passwd .
+cp -i file1 file2
+cp -v file1 dir/
+
+---
+sudo dnf install tree -y
+
+---
+
+mv file1 dir/
+
+mv video1.mp4 videos/
+mv songs/* videos/
+mv video2.mp4 new_video2.mp4
+
+---
+
+rm file1
+
+rm -i file1
+
+rm -r dir/
+
+rmdir dir-name			: Remove empty directory
+
+rm -rf dir/				: Remove, recursively, forcefully.. 
+
+---
+
+head passwd				: shows top 10 logs
+
+tail passwd				: shows bottom 10 logs
+
+head -n 7 passwd		: shoes 7 lives only (head/tail)
+
+tail -f passwd			: Shows last 10 logs and display live logs
+
+sort passwd				: Sort content
+
+sort -r passwd			: Reverse sort content
+
+wc -l passwd			: count lines
+
+-----
+
+grep : Global regular expression print
+
+grep "root" passwd
+
+grep -i "Root" passwd
+
+
+grep -r "root" /path
+
+
+---
+
+
+vim <file-name>
+
+:w			: Save the file (write)
+:wq			: Save and Quit
+
+press o		: to get into insert mode and start with a new line from cursor
+
+:set number
+:set nonumber
+
+nG	Example: 10G / 20G
+
+open file with vim editor and "/<search-word>"
+
+/root
+/ec2-user
+
+dd			; Delete the current line
+
+10dd		: delete 10 lines from cursor
+
+100dd		: delete next 100 lines
+
+
+u			: undo the last change
+
+2u			: undo the last 2 changes
+
+ctrl+r		: redo
+
+:undolist	: Show chnage history
+
+:%s/old/new/g
+
+:%s/root/avinash/g
+---
 
 
 
