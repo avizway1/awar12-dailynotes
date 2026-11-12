@@ -73,6 +73,7 @@ In EC2 default shutdown behaviour is set to stop. We have two options to set up:
 
 The instance public IP address will change when we perform stop and start operations. If we need a static fixed IP address, we need to depend on EIP (Elastic IP). 
 
+- For Instance reboot : Public IP remain same.
 
 In Windows everything starts from drives like C:\ or D:\ 
 In Linux everything starts from one single root (/). Even extra discs and USB drives are mounted as folders under /. 
@@ -262,6 +263,222 @@ ctrl+r		: redo
 
 :%s/root/avinash/g
 ---
+
+===========================================================================================================
+
+D: 12/11/2026
+
+Package : it's a software bundle in a single file with everything needed to install it: the programme, its config files, documentation, and a list of dependency packages. 
+
+Windows: .exe / .msi					: microsoft store / winget / choco
+Linux Fedora : RHEL : .rpm  			: rpm, yum, dnf
+Debian 				: .deb, dpkg		: apt
+
+Repositories / repos : 
+
+/etc/yum.repos.d		: one repo file per repository
+dnf repolist			: shows enabled repos
+dnf repolist all		: shows enabled and disabled repos
+
+
+GPG : GNU Privacy Guard : helps digitally sign the files to prove their identity and integrity 
+
+sudo vim /etc/yum.repos.d/grafana.repo
+
+[grafana]
+name=grafana
+baseurl=https://rpm.grafana.com
+repo_gpgcheck=1
+enabled=1
+gpgcheck=1
+gpgkey=https://rpm.grafana.com/gpg.key
+sslverify=1
+
+
+[example-name]
+name=mydemo									#friendly name
+baseurl=https://yourwebsite/package/		#where package live
+gpgcheck=1									#Enabled
+enabled=1									#1 - use it.. 0 - ignore it..
+
+====================
+
+rpm : Red Hat Package Manager. It is, by default, present on our machine. 
+- The problem with only RPM is that it "cannot resolve dependencies" automatically. 
+
+rpm -ivh package.rpm
+
+rpm -qa
+rpm -qa 
+
+-------
+
+YUM : Yellowdog updater modified. It's a wrapper around RPM that resolves dependencies automatically from the configured repositories. 
+
+DNF : dandified YAM is the next generation of YAM: faster, uses less memory, and resolves dependencies better. 
+
+sudo dnf search <package>
+sudo dnf info <package>
+
+sudo dnf search httpd
+sudo dnf info httpd
+
+sudo dnf install <pkg>
+sudo dnf remove <pkg> 
+sudo dnf reinstall <pkg>
+
+sudo dnf install httpd
+sudo dnf install httpd -y
+
+
+sudo dnf list installed
+sudo dnf check-update
+sudo dnf update
+
+sudo dnf repolist
+sudo dnf history
+
+
+----
+
+Windows: Windows + R --> services.msc 
+
+sudo systemctl status <servcie>
+sudo systemctl start <servcie>
+sudo systemctl stop <servcie>
+sudo systemctl restart <servcie>
+
+
+sudo systemctl status httpd
+sudo systemctl start httpd
+sudo systemctl stop httpd
+sudo systemctl restart httpd
+
+
+sudo systemctl is-enabled httpd
+sudo systemctl is-active httpd
+
+sudo systemctl enable httpd				#Start httpd automatically after every reboot
+sudo systemctl enable httpd --now		# start now + enable at start up	
+
+
+ERR_CONNECTION_REFUSED		: There is no problem with the security group. Traffic is flowing into the EC2 instance but there is no service in a running state to deliver the traffic. 
+
+ERR_CONNECTION_TIMED_OUT	: THese is a problem at Security group, Make sure to open the required port numbers.
+
+----
+
+If any service fail to start, verify journalct
+
+
+systemctl list-units --type=service
+sudo journalctl -u httpd
+
+=======
+
+httpd: Documentroot path		: /var/www/html/ 
+
+httpd configuration path		: /etc/httpd/conf/httpd.conf
+
+# Best practice: always create a backup copy of your configuration, befor you do any changes.
+
+cd /etc/httpd/conf/
+sudo cp httpd.conf httpd.conf.bkp
+
+sudo vim httpd.conf
+
+line 47 (or)
+/Listen
+
+change it to 8080.. save and quit (:wq)
+
+sudo httpd -t
+
+sudo systemctl restart httpd
+
+
+Golden rule for configuration edits: (THis habit prevents most production outages)
+1. Backup.
+2. Edit.
+3. Test syntax.
+4. Restart.
+5. Verify.
+
+---------------------
+
+Task : Perform same things with "nginx"
+
+---------------------
+
+sudo dnf install			--> Install package as administrator
+dnf install					--> Normal user
+
+---------------------
+
+echo "hello from Aviz Academy"
+
+Creates a file if it doesn't exist. 
+
+>		: Overwrite		: Erases the existing content and writes the new content. 		(using a whiteboard)
+>>		: Append		: Add the new content at the end by keeping the existing lines. (Writing a diary)
+
+
+echo "Good Morning" > greerings.txt
+
+
+---
+
+export NAME=Avinash
+export AGE=36
+
+echo "hello my name is $NAME"
+echo "hello my age is $AGE"
+
+
+#!/bin/bash
+echo "hello from $NAME"
+echo "My age is $AGE"
+echo "today is $(date)"
+
+reboot and ran again.. no info..
+
+--
+
+If you want to add variables permanently 
+
+vim ~/.bashrc			#add at bottom
+
+export NAME=Avinash
+export AGE=36
+
+source ~/.bashrc
+
+
+===========================================================================================
+
+for ubuntu: 
+
+sudo apt search httpd
+sudo apt show httpd
+
+sudo apt install <pkg>
+sudo apt remove <pkg> 
+
+
+sudo apt list --installed
+
+apt-cache policy
+cat /var/log/apt/history.log
+
+/etc/apt/sources.list					: repo info
+/etc/apt/sources.list.d/
+
+===========================================================================================
+
+
+
+
+
 
 
 
