@@ -475,6 +475,200 @@ cat /var/log/apt/history.log
 
 ===========================================================================================
 
+D: 13/11/2026
+
+whoami						# Current username
+echo $USER					# current user name
+echo $HOME					#current user's home folder
+echo $PATH					# folders linux searches for commands
+env							#Shows all environment variables
+
+
+sudo -l					: What am i allowed to run with sudo.?
+
+
+To switch to root user: 
+
+				Root's env loaded.?					where you land		when to use.?
+sudo su			NO									same folder			Quick root shell
+sudo su -		YES - login shell, 					/root				Best for admin-related activities
+				simulate a fresh root login	
+sudo -i			YES									/root				same as sudo su -, shorter to type
+
+====================
+
+USER MANAGEMENT : 
+
+
+/etc/passwd			: User details like name, UID, home, shell  - readable by everyone
+/etc/shadow			: Encrypted passwords and password expiry - root only
+/etc/group			: Group details and members 
+/etc/sudoers		: Who gets sudo permissions. Golden rule: never edit directly. Use "sudo visudo". 
+
+tail -n 1 /etc/passwd
+
+ec2-user:x:1000:1000:EC2 Default User:/home/ec2-user:/bin/bash
+
+1 username
+2 password placeholder		(/etc/shadow)
+3 UID - user id	- 1000
+4 GID - Group id - 1000
+5 comment (-c to set comment)
+6 Home directory
+7 login shell
+
+
+user id :  0 		--> root
+user id :  1 - 999	--> system / service accounts (apache, nhinx, sshd)
+user id : 1000		--> ec2-user - the first regular user
+user id : 1001, 1002--> users we create next
+
+
+sudo useradd avinash
+sudo useradd -m avinash							#explicitly create home dir
+sudo useradd -c "created for demo" avinash
+
+tail -n 1 /etc/passwd
+
+sudo passwd avinash								#Set password for avinash user
+
+su avinash										#switch to user (asks avinash password)
+
+sudo usermod -L avinash							#Lock/Disable user
+sudo usermod -U avinash							#UnLock/Enable user
+
+sudo userdel avinash							#Delete user, keeps the home directory
+sudo userdel -r avinash							#Delete user AND the home directory.
+
+sudo lastb										# Failed login attempts
+last											# login history
+
+
+Group : is a set of users. Instead of giving permission to tens of people one by one, give it to a group and add all users to the group. 
+
+sudo groupadd developers					#Create a group
+sudo usermod -aG developers avinash
+
+** THumb rule: -aG = append to a group
+if you pass only -G, the user is removed from all other groups and kept only in the current group. 
+
+getent group developers
+
+Wheel group : members of the wheel group can utilise these sudo permissions. 
+
+(RHEL - wheel group... Ubunut: sudo group)
+
+sudo usermod -aG wheel avinash
+
+Verify Avinash users group membership:
+id avinash
+groups avinash
+
+sudo -l -U avinash
+
+su avinash
+
+sudo dnf install tree -y
+
+=============================
+
+LOGIN to EC2 with a PASSWORD:
+
+1. Make sure your user has a password (avinash)
+
+2.  /etc/ssh/sshd_config		: PasswordAuthentication --> yes		
+
+sudo vim /etc/ssh/sshd_config
+sudo sshd -t
+
+3. /etc/cloud/cloud.cfg
+
+sudo vim /etc/cloud/cloud.cfg
+ssh_pwauth:   true
+
+4. restart the services
+
+sudo systemctl restart sshd
+sudo systemctl restart sssd
+
+
+sshd	: secure shell daemon
+sssd	: system security servcies daemon
+
+=============================
+
+
+Process : a programme that runs in memory. Every process gets a unique number called PID (process ID).
+Sometimes some processes come from parent processes (PPID). 
+
+Foreground 	: runs attached to your terminal. You wait until it finishes. 
+Background 	: runs behind the scenes, your terminal stays free. 
+Daemon		: A background service, no terminal (httpd, sshd, crond)
+
+
+top			: Shows a real-time view of all running processes. Refreshes every 3 seconds. 
+htop		: Same as a top but with a better colourful UI. 
+
+sudo dnf install htop -y
+
+nproc		: Tells us how many CPUs we have in instance
+
+P		: Sort processes by CPU
+M		: Sort processes by Memory
+q		: quit
+
+sleep 10			--> 
+
+sleep 100 &			--> Sends the job to backgrpound. It prints the job number and PID.
+
+nohup sleep 200 &	--> Keep command running even after you log out. 
+
+
+---
+
+ps				: Process attached to our current terminal 
+
+ps aux			: 
+- a: all users
+- u: show user or owner
+- x: exclude process not attached to terminal
+
+ps -ef			: Another full list command,  but shows PPID
+
+ps aux | grep sleep
+ps aux | grep httpd
+
+ps -u ec2-user
+
+pstree				: Process tree in hierarchy 
+pstree -p			: Process tree in hierarchy with PID
+
+pidof sleep
+pidof httpd
+
+pgrep sleep
+
+=====================
+
+Killing a process
+
+kill <pid>				--> SIGTERM 15	- Gracefully
+kill -9 <pid>			--> SIGKILL 9 	- Forcefully
+
+* Thumbrule: always try kill (sigterm),, if not working/repsonding.. then perform sigkill
+
+pkill <process-name>
+pkill sleep
+
+killall sleep			: Kill all processes with that exact name. 
+pkill -u avinash		: kill all processes of one user.
+
+=====================
+
+
+
+
+
 
 
 
