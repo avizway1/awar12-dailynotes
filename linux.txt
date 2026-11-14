@@ -663,12 +663,198 @@ pkill sleep
 killall sleep			: Kill all processes with that exact name. 
 pkill -u avinash		: kill all processes of one user.
 
-=====================
+===============================================================
+
+D: 14/11/2026
+
+d	rwxr-xr-x. 2 ec2-user ec2-user 6 Nov 14 03:41 newtest
+
+d - Type of item
+rwxr-xr-x - Permisisons for owner, group, others
+. SELInux Security context present
+2	- Number of links
+ec2-user ec2-user - Owner (user) and group
+6 - Size in bytes
+Nov 14 03:41 - date modified
+newtest - file name
+
+File types:
+
+- 	regular file
+d	directory
+l	symbolic link - a shortcut pointing to another file or directory
+b	block device (disks)
+c	character device (terminals)
 
 
+				 		file						Directory
+				--------------------------------------------------------------		
+r - read		: View the file content				List whats inside (ls)
+w - write		: Edit the file content				create / delete / rename files inside it
+x - execute		: Run it as a program or script		Enter the directory (cd)
 
 
+octal / Numberic method : each permission has a number. We can add them for user, group, or others. 
 
+read 	- r - 4
+write	- w - 2
+execute - x - 1
+none	- - - 0
+
+7		rwx			4+2+1		Full Access (Read, write and execute)
+6		rw-			4+2+0		Read and write
+5		r-x			4+0+1		Read and Execute
+4		r--			4+0+0		Read Only
+0 		---			0+0+0		No Access
+
+
+SSH refuses a private key that other users can read with an error: "unprotected private key file." 400 means only the owner can read it. 
+
+
+chmod 400 keypair.pem
+
+--------------------------
+					owner			group			others
+chmod 400			r				none			none
+chmod 600			rw				none			none
+chmod 777			rwx				rwx				rwx				- Everyone can do aeverything
+chmod 765			rwx				rw-				r-x
+
+
+--------------------------
+
+Symbolic method (Good to Know)
+
+Instead of numbers we use letters. who + action + permission 
+
+u : owner / user
+g : group
+o : other (everyone else)
+a : all theree together
+
+
+chmod u+x script.sh				- Give the owner execute permissions
+chmod +x script.sh				- Give execute to everyone
+chmod g-w file					- Remove write from the group
+chmod o=r file					- Set others to read only
+
+getfacl test.txt 
+----------------
+# file: test.txt
+# owner: ec2-user
+# group: ec2-user
+
+user::rw-
+group::r--
+other::r--
+
+==============================
+
+sudo chown avinash test.txt								- change the owner
+sudo chown avinash:developers test.txt 					- change owner and group together
+sudo chown -R apache:apache /var/www/html/				- Recirsive - common for web folders
+sudo chgrp developers test.txt 							- chnage only the group
+
+=============================
+
+Scenario 1 : Only the owner can do anything
+
+cd ~
+mkdir priavte
+chmod 700 private
+ls -ld private/
+
+drwx------. 2 ec2-user ec2-user 6 Nov 14 04:12 private/
+
+----
+
+Scenario 2 : Team collaboration directory
+
+cd /opt
+sudo mkdir teamproject
+sudo groupadd devteam
+
+sudo usermod -aG devteam avinash
+
+sudo chgrp devteam teamproject/
+
+getfacl teamproject
+
+sudo chmod 774 teamproject
+
+---
+
+Scenario 3 : Sticky bit
+
+Everyone has all permissions but only the user who created a file can delete it. 
+
+cd /tmp
+sudo mkdir shared
+sudo chmod 1777 shared
+
+=====================================================================================
+
+Identify the IP Address information:
+
+Private IP : works only inside the network. It is unique within the network. 
+Public IP : Works over the internet. Unique across the globe. 
+
+Private IP: 
+
+ipconfig
+ip addr
+ip -br addr
+hostname -I			-> just the private IP
+
+Public IP : 
+curl ifconfig.me
+curl https://checkip.amazonaws.com
+
+====================
+
+wget https://www.google.com							#download the page as index.html
+
+curl -o google.html https://www.google.com			#save with the name we define
+
+curl -I https://www.google.com						#shows response header with status code
+
+
+http status codes:
+
+2xx		: OK/Success
+3xx		: Redirect Request
+4xx		: Client side error
+5xx		: Server side error
+
+=========================
+
+ping: pocket internet gopher
+
+ping google.com
+ping -c 5 google.com
+
+ping <instance-private-ip>						#within the network
+
+
+Ping uses ICMP : internet Control Message Protocol 
+
+open "echo Request" and "Echo Reply" to ping an ec2 instance.
+
+=========================
+
+Hostname:
+
+sudo hostnamectl set-hostname mywebserver			#Change the hostname (reboot and verify)
+
+hostnamectl
+hostname
+
+DNS COnfiguration files:
+
+cat /etc/resolv.conf
+cat /etc/hosts
+
+=========================
 
 
 
