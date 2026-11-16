@@ -1,5 +1,3 @@
-
-
 D: 9/11/2026
 
 Linux is a free, open-source operating system based on Unix. 
@@ -856,6 +854,183 @@ cat /etc/hosts
 
 =========================
 
+D: 16/11/2026
+
+
+HEREDOC : this can write many lines into a file in one go without opening vim or any other editor: anything between two EOF markers. 
+
+cat <<EOF > fruits.txt
+apple
+banana
+mango
+grapes
+oranges
+kiwis
+EOF
+
+------
+
+tee : t shows the output on the screen and saves it to a file at the same time. 
+
+ls -l | tee output.txt					#shows output in terminal and saves it to the file - overwrite
+
+ls -l | tee -a output.txt				#shows output in terminal and saves it to the file - append
+
+ls | tee file1.txt file2.txt			#Sends the output to multiple files at once
+
+echo "hello" | sudo tee -a /etc/hello.txt	#uses sudo
+
+echo "hello" | sudo tee -a /etc/hello.txt > /dev/null	
+
+----
+
+
+find: 
+
+sudo find / -name test.txt				#Case sensitive search, and search in / path
+sudo find /var/log -name test.txt		#Case sensitive search, and search in /var/log path
+
+sudo find /var/log -iname Test.txt		#case insensitive search in /var/log path
+
+sudo find /var/log -name "*.log"		
+sudo find /var/log -iname "error*"
+
+search by type:  f : file.. d directory
+
+
+sudo find /home -type f -name "*.txt"	#search all files with .txt
+
+sudo find /home -type d -empty			#empty directory
+
+sudo find /home -type f -empty			#empty file
+
+
+filter by using size:
+
+sudo find / -type -f -size +100M		#files larger than 100 MB
+
+sudo find / -type f -size 1M			#files of 1Mb size
+
+sudo find /home -user ec2-user			#files owned by a user
+
+sudo find / -type f -perm 777			#files with 777 permisisons
+
+============================
+
+sed : Stream editor
+
+find and replace or delete the text without opening the file. 
+		
+
+
+cat <<EOF > fruits.txt
+apple
+banana shake
+mango
+grapes
+oranges
+kiwis
+apple juice apple slices
+EOF
+
+sed 's/apple/peach/' fruits.txt		Replace the first occurance on each line of apple to peach.
+
+sed 's/apple/peach/g' fruits.txt	Replace all occurance on each line of apple to peach.
+
+sed -i 's/apple/peach/g' fruits.txt		-i--> in-place, save into the file.
+
+sed '/mango/a dragon' fruits.txt		
+
+sed -i '/mango/i dragon' fruits.txt
+
+sed -i '/banana/d' fruits.txt
+
+sed -i.bak 's/peach/pineapple/g' fruits.txt		#keep a backup and change the file
+
+----------
+
+ss
+
+ss -s
+
+ss -tulnp					: currently listening ports with programs.
+
+ss -t state established		: Active TCP connections
+
+sudo lsof -i :80			: Which process is using port 80/22
+sudo lsof -i :22
+
+----
+
+telnet 
+
+If you are using a Windows operating system make sure you enable the Telnet client on your laptop. 
+
+refused: servcie level problem
+timeout : network level problem
+
+telnet <instance-ip> <port>
+
+---
+
+openssl s_client -connect <instance-ip>:<port>
+
+openssl s_client -connect google.com:443
+
+
+===========
+
+ZIP and UNZIP in Linux
+
+zip myfiles.zip test1.txt test2.txt
+zip myfiles.zip *								#zip all files only
+zip direc.zip songs/							#zip the directory
+zip -r entiredire.zip songs/					# recursively all files and directories
+zip -e secure.zip test2.txt test3.txt
+
+unzip myfiles.zip								#unzip
+unzip myfiles -d /tmp							#unzip to a path
+unzip -l myfiles.zip							#list files, without unzip
+unzip secure.zip								#ask for password
+
+---
+
+tar -czvf mybackup.tar.gz test1.txt test2.txt test3.txt
+tar -czvf songs.tar.gz songs/
+
+tat -xzvf mybackup.tar.gz				#untar
+tat -xzvf mybackup.tar.gz -C /tmp		#untar to a folder
+tat -tzvf mybackup.tar.gz				#view files wihtour untar
+
+===========
+
+SCP : Secure copy protocol : 
+
+
+windows to windows			: copy paste (or) Map a local drive to RDP
+windows laptop to linux		: Install Winscp and connect to instance, then copy / Install mobaxterm and copy
+linux to linux				: SCP / rsync
+
+
+Copy a file from ec2 instance /home/ec2-user/entire.zip file to local laptop /Users/avizway/Desktop/scptest directory.
+
+scp -i awar12.pem ec2-user@13.127.108.74:/home/ec2-user/entire.zip /Users/avizway/Desktop/scptest
+
+---
+
+copy a folder from local to ec2
+
+scp -i awar12.pem -r ./keys/ ec2-user@13.127.108.74:/home/ec2-user/
+
+=========
+
+rsync - Smart sync
+
+rsync -av /src/ /dest/
+
+rsync -avz ./test123.txt ec2-user@13.127.108.74:/home/ec2-user/			#with a password
+
+rsync -avzP -e "ssh -i awar12.pem" ./test123.txt ec2-user@13.127.108.74:/home/ec2-user/
 
 
 
