@@ -1033,9 +1033,208 @@ rsync -avz ./test123.txt ec2-user@13.127.108.74:/home/ec2-user/			#with a passwo
 rsync -avzP -e "ssh -i awar12.pem" ./test123.txt ec2-user@13.127.108.74:/home/ec2-user/
 
 
+===============================================================================================
+
+D: 17/11/2026
 
 
+HDD : Hard Disk Drive		: It's a mechanical drive. It uses spinning magnetic platters and a moving read/write head. SSD is cheap but performance is slow compared to SSD. 
+- Data stored on spinning magnetic platters 
+- IOPS : input and output operations per second : 75 - 500 IOPS
+- Best for : Big files read in sequence - logs, backups, big data..
 
+SSD : Solid State Drive		: It's a flash drive. Data is stored in microchips. No moving parts, so it is so much faster compared to an HDD but it costs a bit more than an HDD. 
+- Data stored on microchips or flash 
+- IOPS : input and output operations per second : upto 10 Lakh IOPS
+- Best for : OS, Databases, applications
+
+IOPS : input / output operations per second: how many read and write operations can the disc do in each second? 
+
+Throughput : data transfer rate: how much data moves each second in MB/s or Gbps? 
+
+Throughput (MB/s) = ( IOPS x Block size in KB) / 1024
+
+
+To identify the block size of a volume:
+sudo fdisk -l
+cat /sys/block/<name>/queue/physical-block-size
+
+====================
+
+General Purpose SSD : gp3, gp2		: Boot volumes and most common workloads..
+** Stable performance..
+GP3 : Size: Min 1 GB - Max 64 TB	: IOPS 3,000 Included.. Upto 80,000 with extra cost..
+GP2 : Size: Min 1 GB - Max 16 TB	: 3 IOPS per GB with min 100 IOPS (1 : 3).. 
+
+Provisioned IOPS SSD : io2, io1		: High performance - critical database that needs a specific IOPS count.
+** Highest Performance..
+io2 : Size: Min 4 GB - Max 64 TB	: Max: 256,000 IOPS.. (upto 1,000 per GB)..
+io1 : Size: Min 4 GB - Max 16 TB	: Max: 64,000 IOPS.. (upto 50 per GB)..
+
+
+Throughput Optimised HDD : st1		: Big data, data warehousing, log processings
+Size: Min 125 GB - Max 16 TB
+Max IOPS 500
+
+Cold HDD 				 : sc1		: Same as st1, but with less accessed with low cost.
+Size: Min 125 GB - Max 16 TB
+Max IOPS 250
+
+Magnetic				  : standard : Outdated previous generation - low cost storage
+Size: Min 1 GB - Max 1 TB
+
+====================
+
+root volume : gp2, gp3, io1, io2 and standard
+Addl volume : gp2, gp3, io1, io2, standard, sc1 and st1
+
+====================
+
+A new disc is just a raw empty space, if no file system.
+
+A file system is the index that lets the operating system store files on it. 
+
+ext3 : Third extended file system : max file size 2 TB : Max Volume size 32 TB : Legacy systems
+ext4 : FOrth Extended FS : max file size 16 TB : Max Volume size 1 exabyte : Default ubuntu / Debian
+xfs : max file size 8 Exabytes : Max Volume size 8 Exabytes : defualt RHEL / Amazon Linux, Enterprise Servers
+
+====================
+
+lsblk
+
+df -Th
+
+file -s /dev/...
+
+mkfs -t xfs /dev/...
+
+mount /dev/.. /mnt/..
+
+xfs-growfs -d /dir
+
+====================
+
+
+Step 1 : Create a volume and atached to ec2 instance.
+
+
+Step 2 : Identify the newly attached volume name (df -Th, lsblk)
+
+
+df -Th				: Displays only OS usable or using volumes. 
+
+/dev/nvme0n1p1   xfs       8.0G  1.6G  6.4G  20% /
+
+lsblk				: List all block devices, every attached volume, even if it is not formatted or mounted. 
+
+full path : /dev/nvme1n1
+
+step 3 : does that newly attached volume have a file system? Verify it. 
+
+sudo file -s  /dev/nvme1n1
+
+output: data - no file system
+
+Step 4 : Create a file system on the volume.
+
+sudo mkfs -t xfs /dev/nvme1n1
+
+sudo file -s /dev/nvme1n1
+
+Step 5 : Create a directory and mount the volume..
+
+cd /mnt
+sudo mkdir newvol
+
+sudo mount /dev/nvme1n1 /mnt/newvol
+
+df -Th
+
+----------------------
+
+The above mount is a temporary mount. It won't be available if we restart our EC2 instance. To make it a permanent mount we need to write an entry in the /etc/fstab file. 
+
+--> get the temp entry from /etc/mtab file
+
+cat /etc/mtab | grep /dev/nvme1n1
+
+--> write the below entry into /etc/fstab file
+
+sudo vim /etc/fstab
+
+/dev/nvme1n1 /mnt/newvol xfs rw,seclabel,relatime,inode64,logbufs=8,logbsize=32k,sunit=8,swidth=8,noquota 0 0
+
+--> verify syntax errors
+
+sudo findmnt --verify
+
+--> Validation: reboot and verify the mount point and dummy data
+
+=======================
+
+We already have an existing volume but it is running low on space. You are asked to increase that volume's size. 
+
+step 1 : increase the volume size in AWS Console..
+
+step 2 : grow the file system at OS level
+
+sudo xfs_growfs -d /mnt/newvol
+
+Step 2.2 : If you want to increase root volume size
+
+sudo growpart /dev/nvme0n1 1
+sudo xfs_growfs -d /
+
+sudo init 6 and verify the root volume size
+
+=====================
+
+UNMOUNT COMMANDS:
+
+lsblk (or) df -Th
+
+sudo unmount /mnt/newvol
+sudo vim /etc/fstab				--> Remove the entry
+
+
+=====================
+
+- In Airplus you can only increase the volume. You cannot decrease the volume. 
+- Team rule of thumb: 10% of an existing volume or 10 GB, whichever is higher. 
+- A volume attaches only to an instance in the same availability zone. 
+- You can modify the same volume up to 4 times in 24 hours. 
+- EBS works with the provisioned build method. If you create a 100 GB volume, you have to pay for 100 GB whether you are using it or not. 
+
+=====================
+
+Identify the top-lever biggest folder
+
+sudo du -sh /* | sort -h
+
+======================
+
+
+lsblk -f
+sudo blkid
+
+sudo xfs_admin -U generate /dev/nvme2n1
+
+1. mount with nouuid
+
+sudo mkdir /mnt/tempvol
+
+sudo mount -t xfs -o nouuid /dev/nvme2n1 /mnt/tempvol
+
+2. verify data and unmount
+
+ls -lah /mnt/tempvol
+sudo umount /mnt/tempvol
+
+Generate a new UUID: 
+
+sudo xfs_admin -U generate /dev/nvme2n1
+
+========================================
 
 
 
