@@ -322,7 +322,107 @@ ERR_CONNECTION_REFUSED :
 
 ================================================================================================
 
-D: 9/11/2026
+REFER LINUX.TXT for LINUX CLASS NOTES
+
+================================================================================================
+
+D: 18/11/2026
+
+
+/dev/nvme1n1
+
+sudo file -s /dev/nvme1n1
+
+sudo mkfs -t xfs /dev/nvme1n1
+
+cd /mnt
+sudo mkdir tesvol
+
+sudo mount /dev/nvme1n1 tesvol/
+
+cat /etc/mtab | grep nvme1n1
+tail -n 1 /etc/mtab
+
+/dev/nvme1n1 /mnt/tesvol xfs rw,seclabel,relatime,inode64,logbufs=8,logbsize=32k,sunit=8,swidth=8,noquota 0 0
+
+sudo vim /etc/fstab
+
+mount -a
+
+====================
+
+Snapshot : a snapshot is nothing but a backup copy of an EBS volume. It works with a point-in-time copy mechanism. 
+
+- Point in time means if you create a backup copy at 9:30, whatever data we have in the volume at 9:30, only that data will be backed up. 
+
+- Can we see all the files we have in a snapshot? 
+Answer: No. Attached to an EC2 instance by creating a volume from a snapshot, then only you can view the data. 
+
+- AWS uses an incremental backup mechanism in the backend. We just need the most recent backup copy to restore data. 
+
+- If we have a snapshot with "default encryption", WE CANNOT share it with another AWS account as they cannot decrypt it. 
+
+- We can even make a snapshot public but remember we never, ever share our snapshots publicly as it contains a lot of sensitive corporate information. 
+
+Interviewer: you have an unencrypted volume. You are asked to enable encryption for that particular volume. How can you do it? 
+Ans: we don't have a direct option to modify a volume and enable encryption. We have to use a workaround solution:
+1. Pick unencrypted volume and create a snapshot.
+2. From the snapshot create a new volume.
+3. While creating a new volume enable encryption.
+4. Detach the old volume and replace it with the new encrypted volume at the instance level.
+
+============================
+
+SLAs : Service Level Agreement : 
+
+RTO : recovery time objective 
+Question: how long can we afford to be offline?
+Simple Meaning: downtime limit 
+Example: if our RTO is 2 hours, our system should be-back "up and running" within 2 hours of a crash to avoid business losses. 
+
+RPO : recovery point objective 
+Question: how much data can we offered? 
+Simple Meaning : data loss limit 
+Example: if our RPO is set to 2 hours, we must have backup configured for every 2 hours or less than 2 hours. 
+
+
+Lifecycle Manager / DLM - Data Lifecycle Manager : helps to automate the snapshot creation process based on intervals we configure.
+
+
+DLM (Data Lifecycle Manager) uses the resource allocation tags to filter the resources at the instance level or EBS volume level. 
+
+- We can filter using instance-level tags. We even have an option to exclude specific volumes.
+- We can filter using EBS tags as well.
+
+
+Question: Can you explain your EC2 instance backup strategy currently being followed in your project? 
+
+- Filtering the resources (Tags: key & Values)
+- Frequency
+	- Production : 3 hrs
+	- Non-Production: 12 hrs
+Retention Period : 
+	- Production: 7 Days... 
+	- Non-Production: 3 Days..
+
+=========
+
+For taking backups of EC2 resources we are using the AWS default or AWS inbuilt service called DLM. Generally based on the environment or whatever resource we create, we are going to mandatorily allocate some tags to the resources, like project, OS, and client. In the same way we have a dedicated tag for backup strategy as well, where the key is equal to `backup` and the value varies from environment to environment.
+
+For production we have set the backup frequency to 4 hours. For non-production the backup frequency is 12 hours. Also the retention varies from environment to environment. Mostly for production resources we are retaining snapshots for 7 days. For non-production we are retaining resources for 3 days. 
+
+=========
+
+EFS : Elastic File System 
+
+- EFS works with a protocol called the NFS protocol. NFS - Network File System. 
+- The NFS port number is 2049
+- No pre-provisioning required. 
+- We can store unlimited data. 
+- Limitation: EFS supports only Linux operating systems. 
+- EFS can be mounted to EC2 instances in multiple availability zones within the region. 
+- We can mount it to hundreds to thousands of EC2 instances. 
+
 
 
 
