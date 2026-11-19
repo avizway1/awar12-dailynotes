@@ -424,7 +424,83 @@ EFS : Elastic File System
 - We can mount it to hundreds to thousands of EC2 instances. 
 
 
+We have to establish secured connectivity between EFS and EC2 instances. How can we achieve the utmost secure transfer between the servers? 
 
+
+Secure pipeline mechanism between EC2 instance and EFS contains two steps:
+
+
+Step 1. Create a security group for web servers who want to access EFS.
+
+WEBServer-SG:
+SSH : 0.0.0.0/0 / MyIP / Custom
+HTTP : 0.0.0.0/0 / MyIP / Custom 
+
+Step 2 : create a security group for the EFS service. 
+
+EFS-SG
+NFS : Custom : WEBServer-SG
+
+-----
+
+WebServer SG : sg-0a3d49708ab613f4d - WEB-Server-SG
+
+----
+
+Option 1 : above secured pipeline mechanism . 
+(Same can be used between web server and load balancer, also between web server and database server)
+
+Option 2 : open EFS for the entire VPC CIDR range 
+Problem : another EC2 instance running in the VPC can communicate or can access data we have inside EFS. 
+
+Option 3 : pick EC2 instance private IP addresses and add to EFS security group. 
+Problem : if we integrate with an auto-scaling group, instances will be deleted and new instances will come with new IP addresses. Manually we have to edit the EFS security group whenever any new instance creation happens. 
+
+Option 4 : Open EFS for anywhere. It is a security risk, not a recommended option. 
+
+Option 5 : attach the "default security group" for our EC2 instances and EFS as well.
+By default the default security group is a loopback. It opens all traffic to itself. 
+
+----
+
+1. Launching two EC2 instances across two different availability zones: one in ap-south-1a and another in ap-south-1b 
+** Make sure to use the same security group for both the EC2 instances. 
+
+
+get connect to it and make it as webservers
+
+sudo dnf install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+
+===============
+
+To mount EFS to instance, we have 2 options..
+
+IP Address Mount : we don't use much as IP changes from availability zone to availability zone. 
+DNS Name Mount : remain the same as we are going to use the DNS name. 
+
+=============================================
+
+AMI : Amazon Machine Image : 
+
+
+Requirement : need 10 EC2 instances with the below custom settings. 
+
+1. Need packages, general packages like telnet, tree, internal approved software, or monitoring software. - done
+2. It has to deliver a web page with HTTPD or Nginx. - done
+3. Mount EFS for shared storage at the document root path for HTTPD/Apache. - done
+4. Need an additional volume to store some sensitive content. - done
+5. Need a custom user with a password and sudo permissions. - done
+
+validation status: Restarted and validated 
+
+Option 1 : Launch 10 instances and configure it in each instance (10x work)
+
+Option 2 : Launch 1 Instance and Perform all the required configuration, Make it as a custom template.. Then launch 10 instances from template. (1x work)
+
+
+---------
 
 
 
