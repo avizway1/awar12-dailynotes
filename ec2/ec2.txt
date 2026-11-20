@@ -499,19 +499,81 @@ Option 1 : Launch 10 instances and configure it in each instance (10x work)
 
 Option 2 : Launch 1 Instance and Perform all the required configuration, Make it as a custom template.. Then launch 10 instances from template. (1x work)
 
+==========================================================================================
 
----------
+D: 20/11/2026
+
+Cloudwatch : Helps to monitor our resources.
+
+Cloudwatch has 2 types of monitorings.
+
+1. Basic Monitoring : Monitoring graph updates for every 5 minutes..
+2. Detailed Monitoring : Monitoring graph updates for every 1 minute. **Addl cost.. (Enabling this feature, wont give us any additional graphs)..
+
+Planning to add some load on this instance, so installing a package
+
+sudo dnf install stress -y
+
+nproc			: Tells cpu count of the running instance
+
+CPU load : 
+stress --cpu 2 --timeout 300
+
+Memory Load :
+stress --vm 2 --vm-bytes 512M --timeout 300
+
+-------------
+
+SNS : Simple Notifications Service : We can send alerts to email.. 
+
+Create an SNS topic, Choose "Standard" and add your email as "subscription". 
+Make sure to login to your email and confirm the subscription.
 
 
+Alarm : 
 
+Metric 			: CPU Usage, Network, Disk Usage, Memory
+Threshould 		: The selected metric (CPU usage) usage exceeding (>= 80%) the required percentage for a period (5 min or more).  (OK - Threshould not breached.. IN ALARM - Threshould breached..)
+Action 			: DO you want to take any automated action (stop/reboot/termination/recovery / ASG)
+Notifications	: Send Email alerts using SNS. 
 
+------------
 
+Limitation : We cannot monitor memory utilisation, disk space metrics, Web Servers logs.. using default cloudwatch metrics. 
 
+Solutions : Install Cloudwatch agent inside ec2 instance, so it send 
 
+Step 1 : Navigate to IAM, Choose "Roles", "Create Role".. AWS service --> Service or use case --> ec2 --> CloudWatchAgentServerPolicy and AmazonSSMFullAccess --> create role (cloudwatch-agent-role).
 
+Step 2 : launching a new instance, make sure to attach iam role (or) Choose instance, Instance settings, Secutity --> Modify IAM role --> choose "cloudwatch-agent-role" --> Update IAM role.
 
+step 3 : Install cloudwatch agent
 
+sudo dnf install amazon-cloudwatch-agent -y
 
+sudo systemctl status amazon-cloudwatch-agent
+sudo systemctl enable amazon-cloudwatch-agent
+
+CW agent wont start.. It looks for a configuration file..
+File name	: config.json
+File path	: /opt/aws/amazon-cloudwatch-agent/bin/
+
+Step 4 : Install httpd and test the web server, this generates some logs
+
+httpd access logs path: /var/log/httpd/access_log
+httpd error logs path: /var/log/httpd/error_log
+
+Step 5 : Inform cloudwatch agent to fetch configuration from the given location..
+
+sudo ./amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -C file:///opt/aws/amazon-cloudwatch-agent/bin/config.json -s
+
+Configuration validation succeeded
+
+retart the service and verify the status
+
+systemctl restart amazon-cloudwatch-agent.service 
+
+========================================================
 
 
 
