@@ -575,6 +575,149 @@ systemctl restart amazon-cloudwatch-agent.service
 
 ========================================================
 
+D: 21/11/2026
+
+[host, logName, user, timestamp, request, statusCode=5*, size]
+
+[ip = 124.123.137.98, logName, ident, user, timestamp, request, statusCode, size, agent]
+
+
+SOURCE "arn:aws:logs:ap-south-1:992189742322:log-group:httpd_logs" START=-30m END=0s |
+filter @message like /(?i)error|exception|fail/
+| pattern @message
+| sort @sampleCount desc
+
+
+-----------
+
+
+EventBridge : 
+
+1. Event driven process : React to an event
+
+When an EC2 instance stops, get a notification. 
+When an object uploaded to s3, invoke a lambda function.
+When an IAM user is deleted or created, get an alert or notification. 
+
+2. Scheduled process : Run tasks at a specific interval or specific time.
+
+Every day at 9 am, start instance. 
+Every day at 9 pm, stop the instance. 
+For every 5 minutes invoke a Lambda function. 
+For every 5 minutes invoke an SQS service and process the messages as a batch. 
+
+
+Event : a JSON message that describes a change in state. 
+
+Event bus: the channel through which events flow (default / custom / partner). 
+
+Rules : defines which events to match and where to send them. 
+
+---
+
+Requirement 1: When an EC2 instance state got changed, I should get an alert to my SNS topic. 
+
+
+alert : 
+
+{
+   "version":"0",
+   "id":"2f2fafea-3bf5-56b4-479d-c30db4c4ea55",
+   "detail-type":"EC2 Instance State-change Notification",
+   "source":"aws.ec2",
+   "account":"992189742322",
+   "time":"2026-11-21T04:24:35Z",
+   "region":"ap-south-1",
+   "resources":[
+      "arn:aws:ec2:ap-south-1:992189742322:instance/i-0ac889ba519fd84d7"
+   ],
+   "detail":{
+      "instance-id":"i-0ac889ba519fd84d7",
+      "state":"stopped"
+   }
+}
+
+---
+
+Input Path: 
+
+{
+	"time" : "$.time",
+	"region" : "$.region",
+	"account" : "$.account",
+	"instance-id" : "$.detail.instance-id",
+	"state" : "$.detail.state"
+}
+
+Input Template:
+
+"At <time>, In my account <account> in region <region>, an ec2 instance with id <instance-id> changed its state to <state>"
+
+----
+
+"At 2026-11-21T04:32:08Z, In my account 992189742322 in region ap-south-1, an ec2 instance with id i-0ac889ba519fd84d7 changed its state to stopping"
+
+
+==========
+
+Cloudtrail : CloudTrail service will be enabled by default in every AWS account. 
+- It can store only the last 90 days of logs. 
+- We cannot modify, alter, or tamper with CloudWatch logs. Those logs are read-only. 
+
+=========
+
+Requirement 2: Send an email alert when an IAM user is created or deleted in our AWS account. 
+
+Prerequisite: Create a management trail in CloudTrail in the N. Virginia region. 
+
+{
+  "source": ["aws.iam"],
+  "detail-type": ["AWS API Call via CloudTrail"],
+  "detail": {
+    "eventSource": ["iam.amazonaws.com"],
+    "eventName": ["CreateUser", "DeleteUser"]
+  }
+}
+
+
+---
+
+Task 3 : when anyone opens port 22 or 3389, open for everyone (0.0.0.0/0), immediately send an alert. 
+
+Task 4 : when anyone modifies any existing IAM policy, send an alert. 
+
+-----
+
+Schedules: 
+
+Prerequisite: Create an IAM role to perform the desired operations. Adjust the trust permissions. 
+
+
+Navigate to IAM --> create IAM Role --> AWS service --> choose "ec2" --> ec2fullaccess --> name "schedule-role"
+choose "schedule-role" and edit "Trusted entities" / "Trust relationships" --> 
+
+replace: ec2.amazonaws.com with scheduler.amazonaws.com
+
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "scheduler.amazonaws.com"
+			},
+			"Action": "sts:AssumeRole"
+		}
+	]
+}
+
+==========================================
+
+
+
+
+
+
 
 
 

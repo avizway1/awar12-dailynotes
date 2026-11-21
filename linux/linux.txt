@@ -6,7 +6,7 @@ Linux is a free, open-source operating system based on Unix.
 An operating system is software that sits between us and the hardware. Without an operating system it is just metal or a device. 
 
 - Android uses the Linux kernel. 
-- IOS and macOS: they are not Linux. They use a Unix-style kernel called Darwin / XNU. 
+- iOS and macOS: they are not Linux. They use a Unix-style kernel called Darwin / XNU. 
 
 Why Linux
 - Free : no licencing cost for most of the versions. 
@@ -21,10 +21,10 @@ Distro / Distribution : Linux Kernel + tools + Package Managers + default apps.
 
 
 General Purpose : Ubuntu, Linux Mint, Fedora
-Enterprise Servers : RHEL (Redhar Enterprise License), SUSE, oracla Linux, Amazon Linux
+Enterprise Servers : RHEL (Red Hat Enterprise Linux), SUSE, Oracle Linux, Amazon Linux
 Community Servers : CentOS, AlmaLinux, RockyLinux
 Security Testing / penetration testing : Kali Linux, Parrot OS
-Lightweight Containers : Alpine, Debian - Slim, Puppy Linux, (Bookwarm, trixie - Debian)
+Lightweight Containers : Alpine, Debian - Slim, Puppy Linux, (Bookworm, Trixie - Debian)
 
 
 HOW LINUX BOOTS: 
@@ -91,7 +91,7 @@ ls			: List
 ls -a		: List everything, including the hidden files whose names start with `.`. 
 
 ls -l		: long list
-ls -lh		: long list, values in human redable format
+ls -lh		: long list, values in human readable format
 ls -ltr		: sort by time, oldest first, newest last
 
 cat			: Helps to view the content of a file 
@@ -110,8 +110,8 @@ Special Path symbols:
 /			: Root directory						: cd /
 .			: Current Directory						: cp /etc/file1 .
 ..			: Parent Directory / one step back		: cd ..
-~			: Current user home direcoryt			: cd ~
-*			: Wild card - Matched anything			: ls s*
+~			: Current user home directory			: cd ~
+*			: Wild card - Matches anything			: ls s*
 
 --------
 
@@ -120,7 +120,7 @@ Special Path symbols:
 --------
 
 
-In Linux Ecerything starts from /
+In Linux everything starts from /
 
 
 /bin		: It contains binary executables: the commands used by all users, like `ls`, `cp`, and `cat`. 
@@ -130,7 +130,7 @@ In Linux Ecerything starts from /
 
 /boot		: Bootloader files like a kernel, VM Linux, initramfs, grub2 
 
-/root		: Root user's home directory. It is not the same as `/`.  (c:\users\Administraor)
+/root		: Root user's home directory. It is not the same as `/`.  (c:\users\Administrator)
 
 /home		: All regular users' home directory  (c:\users)
 
@@ -138,7 +138,7 @@ In Linux Ecerything starts from /
 
 /etc		: Configuration files which can be edited will be in text format. 
 
-/var		: Variable files, like logs (/etc/logs/httpd), databases, and web content (/var/www/html/)
+/var		: Variable data that keeps changing: logs (/var/log, e.g. /var/log/httpd), databases, and web content (/var/www/html/)
 
 /usr		: User programmes and libraries 
 
@@ -196,13 +196,13 @@ rm -rf dir/				: Remove, recursively, forcefully..
 
 ---
 
-head passwd				: shows top 10 logs
+head passwd				: shows the first 10 lines of the file
 
-tail passwd				: shows bottom 10 logs
+tail passwd				: shows the last 10 lines of the file
 
-head -n 7 passwd		: shoes 7 lives only (head/tail)
+head -n 7 passwd		: shows only the first 7 lines (tail -n 7 shows the last 7)
 
-tail -f passwd			: Shows last 10 logs and display live logs
+tail -f passwd			: Shows the last 10 lines, then keeps following the file and prints new lines as they are added (live logs). Ctrl+C to stop
 
 sort passwd				: Sort content
 
@@ -255,7 +255,7 @@ u			: undo the last change
 
 ctrl+r		: redo
 
-:undolist	: Show chnage history
+:undolist	: Show change history
 
 :%s/old/new/g
 
@@ -313,7 +313,7 @@ rpm -qa
 
 YUM : Yellowdog updater modified. It's a wrapper around RPM that resolves dependencies automatically from the configured repositories. 
 
-DNF : dandified YAM is the next generation of YAM: faster, uses less memory, and resolves dependencies better. 
+DNF : Dandified YUM is the next generation of YUM: faster, uses less memory, and resolves dependencies better. 
 
 sudo dnf search <package>
 sudo dnf info <package>
@@ -341,10 +341,10 @@ sudo dnf history
 
 Windows: Windows + R --> services.msc 
 
-sudo systemctl status <servcie>
-sudo systemctl start <servcie>
-sudo systemctl stop <servcie>
-sudo systemctl restart <servcie>
+sudo systemctl status <service>
+sudo systemctl start <service>
+sudo systemctl stop <service>
+sudo systemctl restart <service>
 
 
 sudo systemctl status httpd
@@ -362,11 +362,11 @@ sudo systemctl enable httpd --now		# start now + enable at start up
 
 ERR_CONNECTION_REFUSED		: There is no problem with the security group. Traffic is flowing into the EC2 instance but there is no service in a running state to deliver the traffic. 
 
-ERR_CONNECTION_TIMED_OUT	: THese is a problem at Security group, Make sure to open the required port numbers.
+ERR_CONNECTION_TIMED_OUT	: There is a problem at the Security group, Make sure to open the required port numbers.
 
 ----
 
-If any service fail to start, verify journalct
+If any service fail to start, verify journalctl
 
 
 systemctl list-units --type=service
@@ -378,7 +378,7 @@ httpd: Documentroot path		: /var/www/html/
 
 httpd configuration path		: /etc/httpd/conf/httpd.conf
 
-# Best practice: always create a backup copy of your configuration, befor you do any changes.
+# Best practice: always create a backup copy of your configuration, before you do any changes.
 
 cd /etc/httpd/conf/
 sudo cp httpd.conf httpd.conf.bkp
@@ -395,7 +395,7 @@ sudo httpd -t
 sudo systemctl restart httpd
 
 
-Golden rule for configuration edits: (THis habit prevents most production outages)
+Golden rule for configuration edits: (This habit prevents most production outages)
 1. Backup.
 2. Edit.
 3. Test syntax.
@@ -421,7 +421,7 @@ Creates a file if it doesn't exist.
 >>		: Append		: Add the new content at the end by keeping the existing lines. (Writing a diary)
 
 
-echo "Good Morning" > greerings.txt
+echo "Good Morning" > greetings.txt
 
 
 ---
@@ -517,7 +517,7 @@ ec2-user:x:1000:1000:EC2 Default User:/home/ec2-user:/bin/bash
 
 
 user id :  0 		--> root
-user id :  1 - 999	--> system / service accounts (apache, nhinx, sshd)
+user id :  1 - 999	--> system / service accounts (apache, nginx, sshd)
 user id : 1000		--> ec2-user - the first regular user
 user id : 1001, 1002--> users we create next
 
@@ -547,14 +547,14 @@ Group : is a set of users. Instead of giving permission to tens of people one by
 sudo groupadd developers					#Create a group
 sudo usermod -aG developers avinash
 
-** THumb rule: -aG = append to a group
+** Thumb rule: -aG = append to a group
 if you pass only -G, the user is removed from all other groups and kept only in the current group. 
 
 getent group developers
 
 Wheel group : members of the wheel group can utilise these sudo permissions. 
 
-(RHEL - wheel group... Ubunut: sudo group)
+(RHEL - wheel group... Ubuntu: sudo group)
 
 sudo usermod -aG wheel avinash
 
@@ -591,7 +591,7 @@ sudo systemctl restart sssd
 
 
 sshd	: secure shell daemon
-sssd	: system security servcies daemon
+sssd	: System Security Services Daemon
 
 =============================
 
@@ -617,7 +617,7 @@ q		: quit
 
 sleep 10			--> 
 
-sleep 100 &			--> Sends the job to backgrpound. It prints the job number and PID.
+sleep 100 &			--> Sends the job to background. It prints the job number and PID.
 
 nohup sleep 200 &	--> Keep command running even after you log out. 
 
@@ -629,7 +629,7 @@ ps				: Process attached to our current terminal
 ps aux			: 
 - a: all users
 - u: show user or owner
-- x: exclude process not attached to terminal
+- x: also include processes not attached to a terminal (daemons/services like httpd, sshd)
 
 ps -ef			: Another full list command,  but shows PPID
 
@@ -653,7 +653,7 @@ Killing a process
 kill <pid>				--> SIGTERM 15	- Gracefully
 kill -9 <pid>			--> SIGKILL 9 	- Forcefully
 
-* Thumbrule: always try kill (sigterm),, if not working/repsonding.. then perform sigkill
+* Thumbrule: always try kill (sigterm),, if not working/responding.. then perform sigkill
 
 pkill <process-name>
 pkill sleep
@@ -668,7 +668,7 @@ D: 14/11/2026
 d	rwxr-xr-x. 2 ec2-user ec2-user 6 Nov 14 03:41 newtest
 
 d - Type of item
-rwxr-xr-x - Permisisons for owner, group, others
+rwxr-xr-x - Permissions for owner, group, others
 . SELInux Security context present
 2	- Number of links
 ec2-user ec2-user - Owner (user) and group
@@ -715,7 +715,7 @@ chmod 400 keypair.pem
 					owner			group			others
 chmod 400			r				none			none
 chmod 600			rw				none			none
-chmod 777			rwx				rwx				rwx				- Everyone can do aeverything
+chmod 777			rwx				rwx				rwx				- Everyone can do everything
 chmod 765			rwx				rw-				r-x
 
 
@@ -728,7 +728,7 @@ Instead of numbers we use letters. who + action + permission
 u : owner / user
 g : group
 o : other (everyone else)
-a : all theree together
+a : all three together
 
 
 chmod u+x script.sh				- Give the owner execute permissions
@@ -750,15 +750,15 @@ other::r--
 
 sudo chown avinash test.txt								- change the owner
 sudo chown avinash:developers test.txt 					- change owner and group together
-sudo chown -R apache:apache /var/www/html/				- Recirsive - common for web folders
-sudo chgrp developers test.txt 							- chnage only the group
+sudo chown -R apache:apache /var/www/html/				- Recursive - common for web folders
+sudo chgrp developers test.txt 							- change only the group
 
 =============================
 
 Scenario 1 : Only the owner can do anything
 
 cd ~
-mkdir priavte
+mkdir private
 chmod 700 private
 ls -ld private/
 
@@ -826,7 +826,7 @@ http status codes:
 
 =========================
 
-ping: pocket internet gopher
+ping: Packet InterNet Groper - checks whether a host is reachable over the network
 
 ping google.com
 ping -c 5 google.com
@@ -834,7 +834,7 @@ ping -c 5 google.com
 ping <instance-private-ip>						#within the network
 
 
-Ping uses ICMP : internet Control Message Protocol 
+Ping uses ICMP : Internet Control Message Protocol 
 
 open "echo Request" and "Echo Reply" to ping an ec2 instance.
 
@@ -847,7 +847,7 @@ sudo hostnamectl set-hostname mywebserver			#Change the hostname (reboot and ver
 hostnamectl
 hostname
 
-DNS COnfiguration files:
+DNS Configuration files:
 
 cat /etc/resolv.conf
 cat /etc/hosts
@@ -870,7 +870,7 @@ EOF
 
 ------
 
-tee : t shows the output on the screen and saves it to a file at the same time. 
+tee : It shows the output on the screen and saves it to a file at the same time. 
 
 ls -l | tee output.txt					#shows output in terminal and saves it to the file - overwrite
 
@@ -907,13 +907,13 @@ sudo find /home -type f -empty			#empty file
 
 filter by using size:
 
-sudo find / -type -f -size +100M		#files larger than 100 MB
+sudo find / -type f -size +100M		#files larger than 100 MB
 
 sudo find / -type f -size 1M			#files of 1Mb size
 
 sudo find /home -user ec2-user			#files owned by a user
 
-sudo find / -type f -perm 777			#files with 777 permisisons
+sudo find / -type f -perm 777			#files with 777 permissions
 
 ============================
 
@@ -966,7 +966,7 @@ telnet
 
 If you are using a Windows operating system make sure you enable the Telnet client on your laptop. 
 
-refused: servcie level problem
+refused: service level problem
 timeout : network level problem
 
 telnet <instance-ip> <port>
@@ -989,7 +989,7 @@ zip -r entiredire.zip songs/					# recursively all files and directories
 zip -e secure.zip test2.txt test3.txt
 
 unzip myfiles.zip								#unzip
-unzip myfiles -d /tmp							#unzip to a path
+unzip myfiles.zip -d /tmp							#unzip to a path
 unzip -l myfiles.zip							#list files, without unzip
 unzip secure.zip								#ask for password
 
@@ -998,9 +998,9 @@ unzip secure.zip								#ask for password
 tar -czvf mybackup.tar.gz test1.txt test2.txt test3.txt
 tar -czvf songs.tar.gz songs/
 
-tat -xzvf mybackup.tar.gz				#untar
-tat -xzvf mybackup.tar.gz -C /tmp		#untar to a folder
-tat -tzvf mybackup.tar.gz				#view files wihtour untar
+tar -xzvf mybackup.tar.gz				#untar
+tar -xzvf mybackup.tar.gz -C /tmp		#untar to a folder
+tar -tzvf mybackup.tar.gz				#view files without untar
 
 ===========
 
@@ -1038,7 +1038,7 @@ rsync -avzP -e "ssh -i awar12.pem" ./test123.txt ec2-user@13.127.108.74:/home/ec
 D: 17/11/2026
 
 
-HDD : Hard Disk Drive		: It's a mechanical drive. It uses spinning magnetic platters and a moving read/write head. SSD is cheap but performance is slow compared to SSD. 
+HDD : Hard Disk Drive		: It's a mechanical drive. It uses spinning magnetic platters and a moving read/write head. HDD is cheaper, but slower than SSD. 
 - Data stored on spinning magnetic platters 
 - IOPS : input and output operations per second : 75 - 500 IOPS
 - Best for : Big files read in sequence - logs, backups, big data..
@@ -1057,7 +1057,7 @@ Throughput (MB/s) = ( IOPS x Block size in KB) / 1024
 
 To identify the block size of a volume:
 sudo fdisk -l
-cat /sys/block/<name>/queue/physical-block-size
+cat /sys/block/<name>/queue/physical_block_size
 
 ====================
 
@@ -1095,8 +1095,8 @@ A new disc is just a raw empty space, if no file system.
 A file system is the index that lets the operating system store files on it. 
 
 ext3 : Third extended file system : max file size 2 TB : Max Volume size 32 TB : Legacy systems
-ext4 : FOrth Extended FS : max file size 16 TB : Max Volume size 1 exabyte : Default ubuntu / Debian
-xfs : max file size 8 Exabytes : Max Volume size 8 Exabytes : defualt RHEL / Amazon Linux, Enterprise Servers
+ext4 : Fourth Extended FS : max file size 16 TB : Max Volume size 1 exabyte : Default ubuntu / Debian
+xfs : max file size 8 Exabytes : Max Volume size 8 Exabytes : default RHEL / Amazon Linux, Enterprise Servers
 
 ====================
 
@@ -1110,7 +1110,7 @@ mkfs -t xfs /dev/...
 
 mount /dev/.. /mnt/..
 
-xfs-growfs -d /dir
+xfs_growfs -d /dir
 
 ====================
 
@@ -1193,21 +1193,21 @@ UNMOUNT COMMANDS:
 
 lsblk (or) df -Th
 
-sudo unmount /mnt/newvol
+sudo umount /mnt/newvol
 sudo vim /etc/fstab				--> Remove the entry
 
 
 =====================
 
-- In Airplus you can only increase the volume. You cannot decrease the volume. 
+- In AWS, an EBS volume size can only be increased. You cannot decrease it. (To go smaller: create a new smaller volume and copy the data.)
 - Team rule of thumb: 10% of an existing volume or 10 GB, whichever is higher. 
 - A volume attaches only to an instance in the same availability zone. 
 - You can modify the same volume up to 4 times in 24 hours. 
-- EBS works with the provisioned build method. If you create a 100 GB volume, you have to pay for 100 GB whether you are using it or not. 
+- EBS is billed on the provisioned size, not the used size. If you create a 100 GB volume, you pay for 100 GB whether you use it or not. 
 
 =====================
 
-Identify the top-lever biggest folder
+Identify the top-level biggest folder
 
 sudo du -sh /* | sort -h
 
