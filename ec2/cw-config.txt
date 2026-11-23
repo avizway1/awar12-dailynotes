@@ -27,34 +27,16 @@
     "metrics_collected": {
       "mem": {
         "measurement": [
-          {
-            "name": "mem_used_percent",
-            "rename": "MemoryUsedPercent",
-            "unit": "Percent"
-          },
-          {
-            "name": "mem_total",
-            "rename": "TotalMemory",
-            "unit": "Bytes"
-          }
+          { "name": "mem_used_percent", "rename": "MemoryUsedPercent", "unit": "Percent" },
+          { "name": "mem_total", "rename": "TotalMemory", "unit": "Bytes" }
         ],
         "metrics_collection_interval": 60
       },
       "disk": {
-        "resources": [
-          "/"
-        ],
+        "resources": ["/"],
         "measurement": [
-          {
-            "name": "total",
-            "rename": "RootVolumeTotal",
-            "unit": "Bytes"
-          },
-          {
-            "name": "used",
-            "rename": "RootVolumeUsed",
-            "unit": "Bytes"
-          }
+          { "name": "total", "rename": "RootVolumeTotal", "unit": "Bytes" },
+          { "name": "used", "rename": "RootVolumeUsed", "unit": "Bytes" }
         ],
         "drop_device": true,
         "metrics_collection_interval": 60
