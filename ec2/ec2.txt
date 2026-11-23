@@ -711,7 +711,161 @@ replace: ec2.amazonaws.com with scheduler.amazonaws.com
 	]
 }
 
-==========================================
+====================================================================================
+
+D: 23/11/2026
+
+
+ClickOps : performing AWS operations using a browser. 
+
+CLI : command line interface 
+
+https://aws.amazon.com/cli/
+
+https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+
+Install AWS cli using above link..
+
+aws --version
+
+---------------
+
+root user : he will have full rights on our AWS account. 
+
+IAM user : we can create multiple individual users in our AWS account. We can limit every user to their job role or duties. 
+
+Policy: Set of permisisons on our AWS account..
+
+S3 Admin : Username, Password, signin URL..  Policy: S3fullaccess
+EC2 Admin : Username, Password, signin URL.. Policy: EC2fullaccess
+
+--> IAM users will have 2 types of accesses.. 
+1. AWS Management Console : Username, Password, Browser..
+2. Programatic Access : AccessKeyID and SecretAccessKey..
+
+Step 1 : Choose the user name
+
+Step 2 : choose the permisisons (Attach policies directly)
+Select "s3fullaccess"
+
+step 3 : Review and create
+
+Step 4 : Choose the user and navigate to "Security credentials" and choose "Create access key"
+
+--
+
+aws configure
+AccessKeyID : 
+SecretAccessKey : 
+Region : ap-south-1
+Output : 
+
+
+aws <service-name> <command> <arguments>
+
+aws s3 mb s3://avinash-2311-clicreate --region ap-south-1
+
+aws s3 ls
+
+aws s3 ls s3://aviz11-rag-demo
+
+aws s3 cp <sourcepath> <destination-path>
+
+aws s3 cp <sourcepath> <destination-path>
+
+aws s3 sync ./ s3://aviz11-rag-demo
+
+
+aws ec2 describe-instances
+aws ec2 describe-instances --instance-ids <instance-id>
+aws ec2 describe-volumes --volume-ids <volume-id> --output table/text/json
+
+aws s3 ls --dryrun
+
+aws s3 sync ./ s3://aviz11-rag-demo --dryrun
+
+aws s3 ls --debug
+
+--dryrun		: perform command simulation not the actual execution. 
+--debug			: helps to identify potential command issues or connectivity issues. Displays almost all the logs. Execute in the backend before giving output. 
+
+
+aws ec2 describe-volumes --volume-ids vol-0da5028f72f152040 --output table --query "Volumes[*].VolumeType"
+
+aws ec2 describe-volumes --output table --query "Volumes[*].[VolumeId, VolumeType, Encrypted]"
+
+aws ec2 describe-volumes --output table --query "Volumes[*].[VolumeId, VolumeType, Encrypted]" --filter Name=size,Values=8
+
+====================================================================
+
+You can access multiple AWS accounts. You can configure multiple AWS account access from one laptop by using the profiles option. 
+
+aws configure --profile dev
+aws configure --profile uat
+aws configure --profile prd
+
+aws s3 ls --profile dev
+aws s3 ls --profile prd
+aws s3 ls --profile uat
+
+Problem with this option is, Credentials stores in plain text format on our laptop.. 
+
+Windows: c:/users/<username>/.aws/credentails 
+[default]
+accesskey
+secretkey
+[dev]
+accesskey
+secretkey
+[uat]
+accesskey
+secretkey
+
+Windows: c:/users/<username>/.aws/config
+[default]
+ap-south-1
+table
+[dev]
+ap-south-1
+table
+[uat]
+ap-south-1
+table
+
+MAC: cd ~
+ls -a
+
+** Most of the organisations will have a compliance standard to rotate these access key and secret access key periodically for every 60 or 90 days. 
+
+
+====================================================================
+
+We have two alternatives to the access key/secret access key configuration in the laptop. 
+
+1. Avoid using your local laptop. Execute all CLI commands in Cloud Shell. 
+2. Use the newly introduced "AWS login" option. - user laptop..
+
+
+aws sts get-caller-identity			:
+
+sts : Security token service : THis service helps to issue temporary, limited privlaged credentials.
+
+AWS Login: newer and recommended way to access AWS environment using temporary credentials 
+
+
+aws login --profile dev
+aws login --profile uat
+aws login --profile prd
+
+====================================================================================================
+
+https://focustomato.in/
+
+
+
+
+
+
 
 
 
