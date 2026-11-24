@@ -861,6 +861,86 @@ aws login --profile prd
 
 https://focustomato.in/
 
+====================================================================================================
+
+
+D: 24/11/2026
+
+Switch role option : 
+
+Importance : if we are directly allocating permission to an IAM user, if his credentials get compromised, the hacker can get access to AWS resources. 
+To have more to secure our account, we can create a role and we can ask the user to switch to the role. Then only he can get access to our AWS resources. 
+
+Step 1 : Navigate to IAM and create an IAM user.. Dont add any permisisons/policy to this user.
+username: roletest
+password: 
+
+Step 2 : Create an IAM role and allocate the required policies i.e; s3fullaccess.. 
+
+Now edit the role trusted entity and choose who can assume this role. 
+
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Principal": {
+				"AWS": "arn:aws:iam::992189742322:user/roletest"
+			},
+			"Action": "sts:AssumeRole"
+		}
+	]
+}
+
+
+Step 3 : Now, navigate to the IAM user and allow him to assume the role via STS service.
+create a new policy for this IAM user.
+
+choose user, click on "Add permissions" --> choose "Create inline policy" --> search STS service --> choose "Assume Role" only --> pick the role ARN first, then add it while creating the policy. 
+
+step 4 : When working as user, choose "switch role" option and provide the required info then work on the services.
+
+=============================
+
+Systems Manager : 
+
+* CloudOps Exam Imp topic:
+
+sudo dnf install amazon-ssm-agent -y
+sudo dnf enable amazon-ssm-agent --now
+sudo dnf status amazon-ssm-agent
+
+-> If we want to manage EC2 instances using the SSM service, we need to attach an IAM role to the EC2 instance. 
+Policy : AmazonSSMManagedInstanceCore
+
+1. Session Manager : 
+
+Interview question: Can we connect to an EC2 instance without opening port number 22 and without a key pair? 
+
+Ans: connect to an EC2 instance with Session Manager. We don't require any key pair. We don't need to open port 22 as well. The SSM agent running inside the EC2 instance helps to get connected to the instance. 
+
+2. Fleet Manager : 
+- Linux : we can verify all the processes, users, and file systems of the Linux instance. 
+- Windows : connect to the Windows instance using the GUI. 
+
+3. Run Command : we can execute commands without connecting to an EC2 instance. The instance count can vary from tens to hundreds of instances also. 
+
+4. Parameter Store : we can store less sensitive values here as a parameter. We can call these parameters from our application so we do not need to hardcode this information at our application level. 
+- Hardcoding credentials inside the code is not a recommended option. 
+- FREE, NO cost
+
+LIMITATION: it is going: the secret, the value we are storing inside the parameter, is going to be fixed or static. We cannot rotate periodically. 
+
+
+==================
+
+Secrets Manager : if the application wants to have access to some sensitive information, like a username and passwords, then we can store it inside the secrets manager. 
+
+- The secrets manager has an advantage: as we are storing sensitive information 
+- we can rotate the credentials periodically. 
+- We have to pay per secret per month. ($0.40 per secret per month.. $0.05 per 10,000 API calls)
+- we can automatically replicate secrets to another region.
+
 
 
 
