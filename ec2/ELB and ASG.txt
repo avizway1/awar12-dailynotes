@@ -1,0 +1,150 @@
+
+
+Vertical Scaling : adding or removing resources to the same instance, i.e; CPU and memory 
+
+Q: can we perform automatic vertical scaling based on the load? 
+Ans: NO.. 
+
+
+CRQ : Change request : t8i.micro --> t8i.small --> c7i-flex.large
+e-CRQ : Emergency CRQ
+
+CAB / Change Advisoty Board : We have to present our CRQ in CAB meeting.
+Non-prod: weekly 2 times
+Prod: Weekly 1 time
+
+- When is it planned to implement?  Ans: Saturday Morning 05:00 AM - 09:00 AM
+- Is it a client-facing resource or a hosted client-facing application? Ans: Yes
+- Do we have client approvals? Ans: Yes
+- Does it involve budgeting approvals? Ans: Yes, Minimum cost change.. Approval
+- Does this change require any downtime? Ans: Yes, approx 20 minutes
+- Do we have any rollback plan? Ans: Yes, undo the instance type
+- What are the teams involved in this CRQ? Ans: AWS, Prod Support, App Support, db, app/dev team..
+- Have we created a task for all the involved teams? Ans: Yes and all acknowledged. 
+- Are you performing any pre-implementation checks? Ans: Taking Backup.. List and stop services.. 
+- Who will perform the sanity check or change validation (post-implementation)? Ans: prod support.. Dev..
+- Is this change already implemented in the lower environment? If yes share the CRQ ID. Ans: CRQ-UAT123
+Sandbox/training --> dev --> qa --> uat --> prd
+
+-----
+
+Horizontal scaling : adding more instances to deliver our workload.
+
+Q: can we perform automatic Horizontal scaling based on the load? 
+Ans: YES.. using ASG - Auto Scaling Group.
+
+-----
+
+L7	-	Application  Layer		: http, https
+L6	-	Presentation Layer		: TLS/SSLs or ASCII or UTP8: data encryption, data translation, and compression happen. 
+L5	-	Session Layer			: opens, manages, and closes the connections. 
+L4	-	Transport Layer			: TCP, UDP, TLS : Moves data between applications using a port number. TCP guarantees delivery and ordering. 
+L3	-	Network Layer			: IP, TCMP : it finds a path from one network to another network using an IP address. 
+L2	-	Data Link Layer			: MAC/Switch : it pockets a connection between connected devices on the same network. 
+L1	-	Physical Layer			: cable/fiber : the physical reality: zeros and ones as electrical, radio, or light signals 
+
+
+L4 Load balancer : Network Load Balancer
+L7 Load balancer : Application Load Balancer
+
+
+1. High availability: We can span our instance across multiple availability zones.
+2. Single point of contact:  The client can hit one DNS name. The load balancer takes care of data routing to the healthy backend instances.
+3. Security : you do not need to expose your instance. Also we can add SSL or TLS certificates. WAF integration is also possible.  
+
+-----------------------------
+
+Create a Dedicated Security Group for OUR LOAD BALANCER:
+ELB-SG : 
+http: 80: 0.0.0.0/0
+https: 443: 0.0.0.0/0
+
+
+Create a Dedicated Security Group for OUR EC2 INSTANCES:
+APP-SG
+SSH : 22 : Corportate-NW
+HTTP : 80 : ELB-SG
+HTTPS : 443 : ELB-SG
+
+-----------------------------
+userdata: we can pass a command to our EC2 instance while launching it. It executes only when the instance is launched for the first time. 
+
+#!/bin/bash
+sudo dnf install httpd -y
+sudo systemctl enable httpd --now
+echo "<h1>THis is my AP-SOUTH-1A Instance" >> /var/www/html/index.html
+
+-----
+
+Create a Target Group
+
+Target type
+	- Instance			- Only AWS resources supported to add
+	- IP Address		- We can add on-premise resources also
+	- Lambda function
+	- Load Balancer
+
+Port: 80				- On what port our application is running
+Protocol: http
+
+Add instances, review and create target group
+
+-----
+
+ELB : Elastic Load Balancer		- Serice
+
+ALB : Application Load Balancer
+NLB : Network Load Balancer
+GLB : Gateway Load Balancer
+
+----
+
+Choose Application load Blaancer
+
+Name: MyappAlb
+
+Scheme: 
+	Internet-facing : Works over the internet
+	Internal : Intranet : Works with in the network (works with in AWS VPC)
+
+Availability Zones and subnets: - We need to choose atleast 2 AZs.. 
+	choose all
+
+Security Group: 
+	Choose the one we created as Pre-req
+	
+Listeners and routing:
+
+	Hey LB Listen on port 80 and redirect traffic to TG.
+
+--------
+
+How do you troubleshoot if your instance is unhealthy in a target group? 
+- Is your instance in the running state?
+- Verify whether the instance security group's required port is open or not.
+- Verify the health check path you configured. Make sure your path exists in your EC2 instance.
+- Verify whether the application running inside your EC2 instance is working on that port or not.
+- Verify your application's running status. Is our application really running or not?
+- Make sure your load balancer is added with all subnets.
+
+----
+
+We get a DNS name for our load balancer.
+
+nslookup <elb-dns-name>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
