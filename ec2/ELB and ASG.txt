@@ -133,7 +133,7 @@ We get a DNS name for our load balancer.
 
 nslookup <elb-dns-name>
 
-
+MyappAlb-1223425235.ap-south-1.elb.amazonaws.com
 
 
 
