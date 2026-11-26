@@ -135,6 +135,71 @@ nslookup <elb-dns-name>
 
 MyappAlb-1223425235.ap-south-1.elb.amazonaws.com
 
+==========================================================================================
+
+D: 26/11/2026
+
+Question: can one EC2 instance be a member of multiple target groups? 
+Ans: yes, One instance can be member of multiple TGs.
+
+Stickyness : once a session is stuck to one of the web servers for the given session duration, all requests will go to that particular server only. 
+
+---
+
+Q: what algorithm does an application load balancer use? Can we adjust these algorithms? 
+Ans: by default the application load balancer uses the nested round-robin algorithm. Traffic routes as a cycle. 
+
+
+Round robin : It routes requests evenly across healthy targets, in a sequential order. This is commonly used when the received requests are similar in complexity and the targets are similar in processing capability.
+
+Least outstanding requests : Least outstanding requests routes requests to the target with the lowest number of in progress tasks. This is commonly used when the received requests vary in complexity or the targets vary in processing capability.
+
+Weighted Random : uses anomaly mitigation to identify HTTP status codes and connection errors, then routes the traffic intelligently. 
+
+---
+
+It is highly recommended to enable logs at the load balancer level to identify the traffic flows. 
+
+Access Logs : detailed logs of all requests made to our load balancer.
+Connection logs : detailed logs of all connections made to our load balancer.
+Health check logs : health check logs delivered. Target health check statuses.
+
+---
+
+LIMITATION of ALB : the load balancer DNS name resolves to an IP address. Those IP addresses are not fixed or static. It may change. 
+
+
+
+==============================================================================================================
+
+NETWORK LOAD BALANCER
+
+==============================================================================================================
+
+Application load balanser supported protocols : http, https 
+network load balanser supported protocols : TCP, TLS, UDP 
+
+NLB : Network Load Balancer : layer 4 LB : 
+- Supports "millions of requests per second with ultra-low latency". 
+
+- NLB support fixed/static public IPs. 
+
+- NLB works with Flow Hash Algorithm.. It uses a mechanism called 5-tuple ingrediants..
+
+SOurce IP address : who send it
+Source Port : 80
+Destination IP Address : NLB Port IP Address
+Destination Port: 80, 443
+Protocol : TCP / UDP
+
+It uses above info, it prepares hashing and then choose the target..
+
+
+====================================================================================================
+
+
+1. GoldenAMI
+2. LoadBalancer
 
 
 
