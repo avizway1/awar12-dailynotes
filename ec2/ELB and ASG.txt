@@ -197,9 +197,39 @@ It uses above info, it prepares hashing and then choose the target..
 
 ====================================================================================================
 
+1. Launch template : Template for newly launched instances. (Template contains : Instance type, OS/AMI, Security Group, Subnets, Tags, Userdata, IAM Role, Keypair)
 
-1. GoldenAMI
-2. LoadBalancer
+
+B2B Application : Business to Business application. 
+
+
+1. Manaul Scaling : Manually adjusting the desired capacity. 
+
+2. Scheduled Scaling : predictable workload but want to adjust the desired capacity automatically based on time.
+
+3. Autimatic Scaling : Based on workload i.e; CPU, memory, Req count.. Min: 1 Max: 10..
+
+
+==========================================
+
+MINI-CAPSTONE PROJECT: 
+
+1. Launch an ec2 instance and make it as webserver..
+
+2. Create an EFS and Mount to ec2 instance documentrootpath: /var/www/html/ and make it perm mount..
+
+3. Create some web content into this instance. Stop and start the instance and verify the mount status..
+
+4. Crete a GoldenAMI and launch an ec2 instance and  validate all the changes.
+
+5. Create a TargetGroup. Dont add any ec2 instances.
+
+6. Create a LoadBalancer and add the step-5 target group. 
+
+7. Create a Launch Template with GAMI (Step 4), CHoose Instance type, keypair, security groups.. (Dont select Subnets)
+
+8. Create Auto Scaling Group
+
 
 
 
