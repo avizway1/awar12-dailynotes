@@ -218,7 +218,23 @@ MINI-CAPSTONE PROJECT:
 
 2. Create an EFS and Mount to ec2 instance documentrootpath: /var/www/html/ and make it perm mount..
 
-3. Create some web content into this instance. Stop and start the instance and verify the mount status..
+3. Clone the git repository and copy the required code to /var/www/html/ path, also, add the addl configuration of httpd.. Stop and start the instance and verify the mount status..
+
+https://github.com/avizway1/cloudbites
+
+git clone https://github.com/avizway1/cloudbites.git
+
+sudo cp -r cloudbites/app/. /var/www/html/ 
+
+sudo cp cloudbites/apache/cloudbites.conf /etc/httpd/conf.d/
+
+sudo systemctl enable --now httpd php-fpm
+
+sudo systemctl restart httpd php-fpm
+
+sudo chown -R apache:apache /var/www/html/
+
+---
 
 4. Crete a GoldenAMI and launch an ec2 instance and  validate all the changes.
 
@@ -229,6 +245,49 @@ MINI-CAPSTONE PROJECT:
 7. Create a Launch Template with GAMI (Step 4), CHoose Instance type, keypair, security groups.. (Dont select Subnets)
 
 8. Create Auto Scaling Group
+
+
+
+==========
+
+Availability Zone distribution : 
+
+Balanced best effort : if instance launch fails in one availability zone, the auto scaling group will attempt to launch an instance in another healthy availability zone. 
+
+Balanced Only : if launch fails in one availability zone, the auto scaling group will continue to launch instances in the same availability zone even if its status is unhealthy. 
+
+
+=========
+
+Based on Load
+
+1. Simple Scaling
+2. Step Scaling
+3. Target Tracking Scaling
+
+---
+
+Manual Scaling: 
+
+Scheduled Scaling : 
+
+============================================
+
+We can perform content updation with zero downtime...  (Web COntent)
+Ans: Just connect to one of the ec2 instance and place the content in efs mounted path..
+
+---
+
+Configuration modifications with zero downtimes.. (EC2 Configurations or AMI Updations)
+
+Ans: Update your existing launch template with your new desired configuration.. Then perform the instance refresh.. choose "Launch before Terminate", so, new instance will launch, make it stable.. then old one will terminate.. 
+
+
+
+https://github.com/avizway1/cloudbites
+
+
+
 
 
 
